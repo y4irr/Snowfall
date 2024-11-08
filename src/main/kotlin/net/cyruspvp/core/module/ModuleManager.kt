@@ -1,6 +1,7 @@
 package net.cyruspvp.core.module
 
 import net.cyruspvp.core.module.impl.ConfigurationModule
+import net.cyruspvp.core.module.impl.ProfileModule
 import net.cyruspvp.core.utils.CC
 import net.cyruspvp.net.cyruspvp.core.Snowfall
 import org.bukkit.command.ConsoleCommandSender
@@ -21,6 +22,7 @@ class ModuleManager(plugin: Snowfall): ModuleLifecycleManager {
     companion object {
         @JvmStatic
         val configModule = ConfigurationModule()
+        val profileModule = ProfileModule()
     }
 
 
@@ -46,6 +48,7 @@ class ModuleManager(plugin: Snowfall): ModuleLifecycleManager {
 
     private fun initModules() {
         addModules(configModule)
+        addModules(profileModule)
     }
 
     override fun enabled() {
