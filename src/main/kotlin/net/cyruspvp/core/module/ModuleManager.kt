@@ -1,5 +1,6 @@
 package net.cyruspvp.core.module
 
+import net.cyruspvp.core.module.impl.ConfigurationModule
 import net.cyruspvp.core.utils.CC
 import net.cyruspvp.net.cyruspvp.core.Snowfall
 import org.bukkit.command.ConsoleCommandSender
@@ -18,6 +19,8 @@ class ModuleManager(plugin: Snowfall): ModuleLifecycleManager {
     private val console: ConsoleCommandSender = plugin.server.consoleSender
 
     companion object {
+        @JvmStatic
+        val configModule = ConfigurationModule()
     }
 
 
@@ -42,6 +45,7 @@ class ModuleManager(plugin: Snowfall): ModuleLifecycleManager {
     }
 
     private fun initModules() {
+        addModules(configModule)
     }
 
     override fun enabled() {
