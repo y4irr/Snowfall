@@ -22,6 +22,20 @@ abstract class oListener(plugin: JavaPlugin) : Listener {
 
     protected abstract fun registerEvents()
 
+    protected inline fun <reified T : Event> monitorPriority(crossinline action: (T) -> Unit) {
+        val listener = object : Listener {
+            @EventHandler(priority = EventPriority.MONITOR)
+            fun onEvent(event: Event) {
+                if (event is T) {
+                    action(event)
+                }
+            }
+        }
+
+        register(listener)
+    }
+
+
     protected inline fun <reified T : Event> highestPriority(crossinline action: (T) -> Unit) {
         val listener = object : Listener {
             @EventHandler(priority = EventPriority.HIGHEST)
