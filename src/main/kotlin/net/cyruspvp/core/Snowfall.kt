@@ -1,5 +1,7 @@
 package net.cyruspvp.net.cyruspvp.core
 
+import net.cyruspvp.core.module.ModuleLifecycleManager
+import net.cyruspvp.core.module.ModuleManager
 import org.bukkit.plugin.java.JavaPlugin
 
 /*
@@ -13,8 +15,10 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class Snowfall: JavaPlugin() {
 
-    override fun onEnable() {
+    private lateinit var moduleLifecycleManager: ModuleLifecycleManager
 
+    override fun onEnable() {
+        moduleLifecycleManager = ModuleManager(this)
     }
 
     override fun onDisable() {

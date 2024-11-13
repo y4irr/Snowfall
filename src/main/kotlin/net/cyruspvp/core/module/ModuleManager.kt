@@ -1,6 +1,7 @@
 package net.cyruspvp.core.module
 
 import net.cyruspvp.core.module.impl.ConfigurationModule
+import net.cyruspvp.core.module.impl.ListenersModule
 import net.cyruspvp.core.module.impl.ProfileModule
 import net.cyruspvp.core.utils.CC
 import net.cyruspvp.net.cyruspvp.core.Snowfall
@@ -25,13 +26,15 @@ class ModuleManager(plugin: Snowfall): ModuleLifecycleManager {
         val profileModule = ProfileModule()
     }
 
+    val listenerModule = ListenersModule()
+
 
     init {
         startup()
         console.sendMessage(CC.translate("&7[&bSnowfall&7] &aModule startup task finished successfully"))
     }
 
-    /**
+    /**t
      * I Already know use enabled and disabled
      * when there's a startup method is useless
      * but when you obfuscate all this looks very different
@@ -49,6 +52,7 @@ class ModuleManager(plugin: Snowfall): ModuleLifecycleManager {
     private fun initModules() {
         addModules(configModule)
         addModules(profileModule)
+        addModules(listenerModule)
     }
 
     override fun enabled() {
