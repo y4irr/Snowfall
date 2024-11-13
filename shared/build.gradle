@@ -1,0 +1,56 @@
+plugins {
+    id 'idea'
+    id 'maven-publish'
+    id 'org.jetbrains.kotlin.kapt' version '1.9.22'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.22'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://maven.elmakers.com/repository/' }
+}
+
+dependencies {
+    compileOnly 'dev.yek4h.spigot:Samurai-server:1.8.8-R0.1-SNAPSHOT'
+
+    implementation 'org.mongodb:mongo-java-driver:3.12.10'
+    implementation 'redis.clients:jedis:2.9.0'
+
+    implementation fileTree(dir: '.lib', include: '*.jar')
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifactId = project.name
+            pom {
+                name = project.name
+                description = 'CyrusPvP Minimalist Core'
+                url = 'https://www.cyruspvp.net'
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = 'local'
+            url = uri("${buildDir}/output")
+        }
+    }
+}
+
+tasks.withType(Jar).configureEach {
+    destinationDirectory = file("C:\\Users\\Yair\\Desktop\\rwar\\plugins")
+    archiveFileName = "${project.name}-${project.version}.jar"
+}
+
+tasks.withType(com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar).configureEach {
+    destinationDirectory = file("C:\\Users\\Yair\\Desktop\\rwar\\plugins")
+    archiveFileName = "${project.name}-${project.version}-all.jar"
+}

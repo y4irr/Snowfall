@@ -1,2 +1,6 @@
 rootProject.name = 'Snowfall'
 
+include 'bukkit'
+include 'shared'
+include 'proxy'
+

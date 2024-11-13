@@ -6,6 +6,7 @@ import net.cyruspvp.core.module.ModuleManager
 import net.cyruspvp.core.utils.MongoUtil
 import org.bson.Document
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 /*
  * This project can't be redistributed without
