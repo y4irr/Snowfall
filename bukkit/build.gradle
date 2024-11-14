@@ -16,9 +16,7 @@ dependencies {
     implementation project (":shared")
 
     compileOnly 'dev.yek4h.spigot:Samurai-server:1.8.8-R0.1-SNAPSHOT'
-
-    implementation 'org.mongodb:mongo-java-driver:3.12.10'
-    implementation 'redis.clients:jedis:2.9.0'
+    implementation 'com.jonahseguin:drink:1.0.5'
 
     implementation fileTree(dir: '.lib', include: '*.jar')
 }
@@ -34,8 +32,8 @@ publishing {
             artifactId = project.name
             pom {
                 name = project.name
-                description = 'CyrusPvP Minimalist Core'
-                url = 'https://www.cyruspvp.net'
+                description = 'Aridi Development Core'
+                url = 'https://www.aridi.vip'
             }
         }
     }

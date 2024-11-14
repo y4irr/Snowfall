@@ -1,3 +1,4 @@
-name: Snowfallw
-main: net.cyruspvp.core.Snowfall
+name: Snowfall
+main: vip.aridi.core.Snowfall
 version: 1.0-SNAPSHOT
+authors: ["Yair, Switch"]

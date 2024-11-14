@@ -1,5 +1,5 @@
 allprojects {
-    group = "net.cyuruspvp.core"
+    group = "vip.aridi.core"
     version = "1.0-SNAPSHOT"
 }
 
