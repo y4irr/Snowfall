@@ -3,7 +3,11 @@ package vip.aridi.core.module
 import vip.aridi.core.utils.CC
 import vip.aridi.core.Snowfall
 import org.bukkit.command.ConsoleCommandSender
-import vip.aridi.core.module.impl.*
+import vip.aridi.core.module.impl.core.ConfigurationModule
+import vip.aridi.core.module.impl.core.ProfileModule
+import vip.aridi.core.module.impl.system.GrantModule
+import vip.aridi.core.module.impl.system.ListenersModule
+import vip.aridi.core.module.impl.system.RankModule
 
 /*
  * This project can't be redistributed without
@@ -66,11 +70,15 @@ class ModuleManager(plugin: Snowfall): vip.aridi.core.module.ModuleLifecycleMana
     }
 
     override fun loadModules() {
-        modules.sortedBy { it.order() }.forEach {
+        modules.sortedWith(compareBy(
+            { it.category().order },
+            { it.order() }
+        )).forEach {
             it.load()
             console.sendMessage(CC.translate("&7[&bModule System&7] &a${it.moduleName()} module has been enabled successfully"))
         }
     }
+
 
     override fun unloadModules() {
         modules.sortedByDescending { it.order() }.forEach {

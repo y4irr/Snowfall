@@ -13,11 +13,13 @@ interface IModule {
 
     fun order(): Int
 
+    fun category(): ModuleCategory
+
     fun load()
 
     fun unload()
 
     fun reload()
 
-    fun moduleName() : String
+    fun moduleName(): String
 }
