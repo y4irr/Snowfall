@@ -21,7 +21,7 @@ interface ModuleLifecycleManager {
 
     fun unloadModules()
 
-    fun addModules(iModule: vip.aridi.core.module.IModule)
+    fun addModules(iModule: IModule)
 
     fun reloadModule(moduleName: Int)
 

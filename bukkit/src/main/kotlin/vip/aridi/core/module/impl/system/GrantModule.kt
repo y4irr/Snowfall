@@ -1,4 +1,4 @@
-package vip.aridi.core.module.impl
+package vip.aridi.core.module.impl.system
 
 import com.google.gson.Gson
 import com.mongodb.client.MongoCollection
@@ -7,9 +7,9 @@ import org.bson.Document
 import vip.aridi.core.database.MongoDatabase
 import vip.aridi.core.grant.Grant
 import vip.aridi.core.module.IModule
+import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.rank.Rank
 import java.util.*
-import javax.swing.text.html.Option
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -34,6 +34,10 @@ class GrantModule: IModule {
 
     override fun order(): Int {
         return 6
+    }
+
+    override fun category(): ModuleCategory {
+        TODO("Not yet implemented")
     }
 
     override fun load() {

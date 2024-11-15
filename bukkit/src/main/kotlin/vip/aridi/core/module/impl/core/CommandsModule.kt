@@ -1,10 +1,11 @@
-package vip.aridi.core.module.impl
+package vip.aridi.core.module.impl.core
 
 import com.jonahseguin.drink.CommandService
 import com.jonahseguin.drink.Drink
 import vip.aridi.core.Snowfall
 import vip.aridi.core.command.*
 import vip.aridi.core.module.IModule
+import vip.aridi.core.module.ModuleCategory
 
 /*
  * This project can't be redistributed without
@@ -17,7 +18,11 @@ import vip.aridi.core.module.IModule
 
 class CommandsModule: IModule {
     override fun order(): Int {
-        return 4
+        return 3
+    }
+
+    override fun category(): ModuleCategory {
+        return ModuleCategory.CORE
     }
 
     override fun load() {

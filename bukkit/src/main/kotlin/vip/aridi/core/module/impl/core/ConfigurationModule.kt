@@ -1,8 +1,9 @@
-package vip.aridi.core.module.impl
+package vip.aridi.core.module.impl.core
 
 import vip.aridi.core.module.IModule
 import vip.aridi.core.utils.Configuration
 import vip.aridi.core.Snowfall
+import vip.aridi.core.module.ModuleCategory
 
 /*
  * This project can't be redistributed without
@@ -19,6 +20,10 @@ class ConfigurationModule: IModule {
 
     override fun order(): Int {
         return 1
+    }
+
+    override fun category(): ModuleCategory {
+        TODO("Not yet implemented")
     }
 
     override fun load() {

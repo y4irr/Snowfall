@@ -1,8 +1,9 @@
-package vip.aridi.core.module.impl
+package vip.aridi.core.module.impl.system
 
 import vip.aridi.core.module.IModule
 import vip.aridi.core.profile.listener.ProfileListener
 import vip.aridi.core.Snowfall
+import vip.aridi.core.module.ModuleCategory
 
 /*
  * This project can't be redistributed without
@@ -16,6 +17,10 @@ import vip.aridi.core.Snowfall
 class ListenersModule: IModule {
     override fun order(): Int {
         return 3
+    }
+
+    override fun category(): ModuleCategory {
+        TODO("Not yet implemented")
     }
 
     override fun load() {

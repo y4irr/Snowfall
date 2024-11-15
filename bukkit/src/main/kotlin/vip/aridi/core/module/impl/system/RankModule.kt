@@ -1,4 +1,4 @@
-package vip.aridi.core.module.impl
+package vip.aridi.core.module.impl.system
 
 import com.google.gson.GsonBuilder
 import com.mongodb.client.MongoCollection
@@ -7,6 +7,7 @@ import com.mongodb.client.model.UpdateOptions
 import org.bson.Document
 import vip.aridi.core.database.MongoDatabase
 import vip.aridi.core.module.IModule
+import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.util.LongDeserializer
 
@@ -58,6 +59,10 @@ class RankModule(): IModule {
 
     override fun order(): Int {
         return 5
+    }
+
+    override fun category(): ModuleCategory {
+        TODO("Not yet implemented")
     }
 
     override fun load() {

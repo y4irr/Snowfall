@@ -1,4 +1,4 @@
-package vip.aridi.core.module.impl
+package vip.aridi.core.module.impl.core
 
 import com.mongodb.client.model.Filters
 import vip.aridi.core.database.MongoDatabase
@@ -9,6 +9,7 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import vip.aridi.core.module.ModuleCategory
 import java.util.*
 
 /*
@@ -27,6 +28,10 @@ class ProfileModule : IModule {
 
     override fun order(): Int {
         return 2
+    }
+
+    override fun category(): ModuleCategory {
+        TODO("Not yet implemented")
     }
 
     override fun load() {
