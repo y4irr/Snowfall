@@ -1,12 +1,9 @@
 package vip.aridi.core.module
 
-import vip.aridi.core.module.impl.ConfigurationModule
-import vip.aridi.core.module.impl.ListenersModule
-import vip.aridi.core.module.impl.ProfileModule
 import vip.aridi.core.utils.CC
 import vip.aridi.core.Snowfall
 import org.bukkit.command.ConsoleCommandSender
-import vip.aridi.core.module.impl.RankModule
+import vip.aridi.core.module.impl.*
 
 /*
  * This project can't be redistributed without
@@ -26,6 +23,7 @@ class ModuleManager(plugin: Snowfall): vip.aridi.core.module.ModuleLifecycleMana
         val configModule = ConfigurationModule()
         val profileModule = ProfileModule()
         val rankModule = RankModule()
+        val grantModule = GrantModule()
     }
 
     val listenerModule = ListenersModule()
@@ -56,6 +54,7 @@ class ModuleManager(plugin: Snowfall): vip.aridi.core.module.ModuleLifecycleMana
         addModules(profileModule)
         addModules(listenerModule)
         addModules(rankModule)
+        addModules(grantModule)
     }
 
     override fun enabled() {
