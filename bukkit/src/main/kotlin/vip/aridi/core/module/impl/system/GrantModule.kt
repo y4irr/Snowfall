@@ -33,11 +33,11 @@ class GrantModule: IModule {
     private lateinit var collection: MongoCollection<Document>
 
     override fun order(): Int {
-        return 6
+        return 2
     }
 
     override fun category(): ModuleCategory {
-        TODO("Not yet implemented")
+        return ModuleCategory.SYSTEM
     }
 
     override fun load() {

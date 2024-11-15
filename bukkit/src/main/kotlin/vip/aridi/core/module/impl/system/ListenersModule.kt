@@ -16,11 +16,11 @@ import vip.aridi.core.module.ModuleCategory
 
 class ListenersModule: IModule {
     override fun order(): Int {
-        return 3
+        return 4
     }
 
     override fun category(): ModuleCategory {
-        TODO("Not yet implemented")
+        return ModuleCategory.SYSTEM
     }
 
     override fun load() {

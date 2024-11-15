@@ -23,7 +23,7 @@ class ConfigurationModule: IModule {
     }
 
     override fun category(): ModuleCategory {
-        TODO("Not yet implemented")
+        return ModuleCategory.CORE
     }
 
     override fun load() {

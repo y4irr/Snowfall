@@ -58,11 +58,11 @@ class RankModule(): IModule {
     lateinit var defaultRank: Rank
 
     override fun order(): Int {
-        return 5
+        return 1
     }
 
     override fun category(): ModuleCategory {
-        TODO("Not yet implemented")
+        return ModuleCategory.SYSTEM
     }
 
     override fun load() {
