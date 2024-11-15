@@ -6,8 +6,10 @@ import com.mongodb.client.model.Filters
 import org.bson.Document
 import vip.aridi.core.database.MongoDatabase
 import vip.aridi.core.grant.Grant
+import vip.aridi.core.grant.service.GrantExpiryService
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
+import vip.aridi.core.module.ModuleManager
 import vip.aridi.core.rank.Rank
 import java.util.*
 import kotlin.collections.ArrayList
@@ -26,6 +28,7 @@ class GrantModule: IModule {
     val grant = HashMap<UUID, Rank>()
     val active = HashMap<UUID, ArrayList<Grant>>()
 
+    val expiryService = GrantExpiryService()
     //Expiry Service
 
     private var adapter: Optional<GrantAdapter> = Optional.empty()
@@ -87,11 +90,18 @@ class GrantModule: IModule {
             gson.fromJson(it.toJson(), Grant::class.java)
         }.toSet()
     }
+    fun setGrant(uuid: UUID, grants: Collection<Grant>) {
+        grant[uuid] = (grants.filter{!it.isVoided() && !it.isRemoved()}.mapNotNull {it.getRank()}.sortedBy{it.priority}.reversed().firstOrNull() ?: ModuleManager.rankModule.defaultRank)
+    }
 
     fun findGrantsBySender(sender: UUID): Set<Grant> {
         return collection.find(Filters.eq("senderId", sender.toString())).map {
             gson.fromJson(it.toJson(), Grant::class.java)
         }.toSet()
+    }
+
+    fun findProvider(): Optional<GrantAdapter> {
+        return adapter
     }
 
     fun setProvider(adapter: GrantAdapter?) {
