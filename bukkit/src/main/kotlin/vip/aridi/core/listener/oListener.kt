@@ -86,6 +86,18 @@ abstract class oListener(plugin: JavaPlugin) : Listener {
 
         register(listener)
     }
+    protected inline fun <reified T : Event> lowestPriority(crossinline action: (T) -> Unit) {
+        val listener = object : Listener {
+            @EventHandler(priority = EventPriority.LOWEST)
+            fun onEvent(event: Event) {
+                if (event is T) {
+                    action(event)
+                }
+            }
+        }
+
+        register(listener)
+    }
 
     fun register(listener: Listener) {
         HandlerList.getRegisteredListeners(Snowfall.get()).forEach { handler ->
