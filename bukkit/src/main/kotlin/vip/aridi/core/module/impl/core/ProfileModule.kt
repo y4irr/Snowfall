@@ -10,7 +10,9 @@ import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import vip.aridi.core.module.ModuleCategory
+import vip.aridi.core.module.ModuleManager
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 /*
  * This project can't be redistributed without
@@ -118,6 +120,25 @@ class ProfileModule : IModule {
 
     fun deleteProfile(id: UUID): Profile? {
         return this.profiles.remove(id)
+    }
+
+    fun calculatePermissions(permissions: ArrayList<String>,defaultPermissions: Boolean): ConcurrentHashMap<String, Boolean> {
+
+        val toReturn = ConcurrentHashMap<String,Boolean>()
+
+        if (defaultPermissions) {
+            toReturn.putAll(ModuleManager.rankModule.defaultRank.permission.associate{
+                val value = !it.startsWith("-")
+                return@associate (if (value) it else it.substring(1)).toLowerCase() to value
+            })
+        }
+
+        toReturn.putAll(permissions.associate{
+            val value = !it.startsWith("-")
+            return@associate (if (value) it else it.substring(1)).toLowerCase() to value
+        })
+
+        return toReturn
     }
 
     private fun fromDocument(document: Document): Profile? {
