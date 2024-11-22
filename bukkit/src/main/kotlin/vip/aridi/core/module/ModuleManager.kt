@@ -5,9 +5,7 @@ import vip.aridi.core.Snowfall
 import org.bukkit.command.ConsoleCommandSender
 import vip.aridi.core.module.impl.core.ConfigurationModule
 import vip.aridi.core.module.impl.core.ProfileModule
-import vip.aridi.core.module.impl.system.GrantModule
-import vip.aridi.core.module.impl.system.ListenersModule
-import vip.aridi.core.module.impl.system.RankModule
+import vip.aridi.core.module.impl.system.*
 
 /*
  * This project can't be redistributed without
@@ -28,9 +26,11 @@ class ModuleManager(plugin: Snowfall): vip.aridi.core.module.ModuleLifecycleMana
         val profileModule = ProfileModule()
         val rankModule = RankModule()
         val grantModule = GrantModule()
+        val permissionModule = PermissionModule()
     }
 
     val listenerModule = ListenersModule()
+    val managerModule = ManagerModule()
 
 
     init {
@@ -59,6 +59,8 @@ class ModuleManager(plugin: Snowfall): vip.aridi.core.module.ModuleLifecycleMana
         addModules(listenerModule)
         addModules(rankModule)
         addModules(grantModule)
+        addModules(permissionModule)
+        addModules(managerModule)
     }
 
     override fun enabled() {
