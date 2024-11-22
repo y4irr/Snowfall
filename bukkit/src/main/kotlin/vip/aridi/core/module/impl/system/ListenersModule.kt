@@ -4,6 +4,7 @@ import vip.aridi.core.module.IModule
 import vip.aridi.core.profile.listener.ProfileListener
 import vip.aridi.core.Snowfall
 import vip.aridi.core.module.ModuleCategory
+import vip.aridi.core.permissions.listener.PermissionListener
 
 /*
  * This project can't be redistributed without
@@ -25,6 +26,7 @@ class ListenersModule: IModule {
 
     override fun load() {
         ProfileListener(Snowfall.get())
+        PermissionListener(Snowfall.get())
     }
 
     override fun unload() {
