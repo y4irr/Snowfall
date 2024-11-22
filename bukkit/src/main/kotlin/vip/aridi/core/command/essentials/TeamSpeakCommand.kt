@@ -1,9 +1,8 @@
-package vip.aridi.core.command
+package vip.aridi.core.command.essentials
 
 import com.jonahseguin.drink.annotation.Command
 import com.jonahseguin.drink.annotation.Sender
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 import vip.aridi.core.module.ModuleManager
 import vip.aridi.core.utils.CC
 
@@ -16,12 +15,12 @@ import vip.aridi.core.utils.CC
  * Date: 13 - nov
  */
 
-class DiscordCommand {
+class TeamSpeakCommand {
 
-    @Command(name = "", aliases = ["dc"], desc = "")
+    @Command(name = "", aliases = ["ts", "ts3"], desc = "")
     fun onCommand(@Sender sender: CommandSender) {
-        for (s in ModuleManager.configModule.messagesConfig.config.getStringList("MESSAGES.DISCORD")) {
-            sender.sendMessage(CC.translate(s.replace("{discord}", ModuleManager.configModule.mainConfig.config.getString("LINKS.DISCORD"))))
+        for (s in ModuleManager.configModule.messagesConfig.config.getStringList("MESSAGES.TEAMSPEAK")) {
+            sender.sendMessage(CC.translate(s.replace("{teamspeak}", ModuleManager.configModule.mainConfig.config.getString("LINKS.TEAMSPEAK"))))
         }
     }
 }

@@ -3,7 +3,7 @@ package vip.aridi.core.module.impl.core
 import com.jonahseguin.drink.CommandService
 import com.jonahseguin.drink.Drink
 import vip.aridi.core.Snowfall
-import vip.aridi.core.command.*
+import vip.aridi.core.command.essentials.*
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
 

@@ -1,4 +1,4 @@
-package vip.aridi.core.command
+package vip.aridi.core.command.essentials
 
 /*
  * This project can't be redistributed without
@@ -9,5 +9,5 @@ package vip.aridi.core.command
  * Date: 13 - nov
  */
 
-class MoreCommand {
+class HeadCommand {
 }

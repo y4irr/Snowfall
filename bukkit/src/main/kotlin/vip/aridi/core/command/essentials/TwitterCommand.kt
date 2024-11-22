@@ -1,4 +1,4 @@
-package vip.aridi.core.command
+package vip.aridi.core.command.essentials
 
 import com.jonahseguin.drink.annotation.Command
 import com.jonahseguin.drink.annotation.Sender
@@ -15,12 +15,12 @@ import vip.aridi.core.utils.CC
  * Date: 13 - nov
  */
 
-class StoreCommand {
+class TwitterCommand {
 
-    @Command(name = "", desc = "")
+    @Command(name = "", aliases = ["twitter"], desc = "")
     fun onCommand(@Sender sender: CommandSender) {
-        for (s in ModuleManager.configModule.messagesConfig.config.getStringList("MESSAGES.STORE")) {
-            sender.sendMessage(CC.translate(s.replace("{store}", ModuleManager.configModule.mainConfig.config.getString("LINKS.STORE"))))
+        for (s in ModuleManager.configModule.messagesConfig.config.getStringList("MESSAGES.X")) {
+            sender.sendMessage(CC.translate(s.replace("{twitter}", ModuleManager.configModule.mainConfig.config.getString("LINKS.X"))))
         }
     }
 }
