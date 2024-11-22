@@ -11,7 +11,6 @@ repositories {
     mavenCentral()
     maven { url 'https://maven.elmakers.com/repository/' }
 }
-
 dependencies {
     implementation project (":shared")
 
@@ -23,6 +22,14 @@ dependencies {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+    }
 }
 
 publishing {
