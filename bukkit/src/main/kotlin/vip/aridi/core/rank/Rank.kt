@@ -30,6 +30,7 @@ class Rank (
     var hidden: Boolean = false,
     var staff: Boolean = false,
     var discordId: String? = null,
+    var price: Int = 0,
     var canBeGrantable: Boolean = true
 
 ) {
