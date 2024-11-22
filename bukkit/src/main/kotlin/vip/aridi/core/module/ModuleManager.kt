@@ -16,7 +16,7 @@ import vip.aridi.core.module.impl.system.*
  * Date: 08 - nov
  */
 
-class ModuleManager(plugin: Snowfall): vip.aridi.core.module.ModuleLifecycleManager {
+class ModuleManager(plugin: Snowfall):ModuleLifecycleManager {
     private val modules: MutableList<IModule> = mutableListOf()
     private val console: ConsoleCommandSender = plugin.server.consoleSender
 
