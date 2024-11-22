@@ -7,6 +7,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.java.JavaPlugin
+import vip.aridi.core.listener.oListener
 
 /*
  * This project can't be redistributed without
@@ -17,7 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin
  * Date: 08 - nov
  */
 
-class ProfileListener(plugin: JavaPlugin) : vip.aridi.core.listener.oListener(plugin) {
+class ProfileListener(plugin: JavaPlugin) : oListener(plugin) {
 
 
     override fun registerEvents() {
