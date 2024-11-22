@@ -35,7 +35,7 @@ class PermissionModule: IModule {
 
     override fun load() {
         PermissionListener(Snowfall.get())
-        //dev.ryu.core.shared.Shared.backendManager.getJupiter().addListener(PermissionOrbitListener())
+        //dev.ryu.core.shared.Shared.backendManager.getJupiter().addListener(PermissionOrbitListener()) we import this to add the listener API to REDIS
     }
 
     override fun unload() {
