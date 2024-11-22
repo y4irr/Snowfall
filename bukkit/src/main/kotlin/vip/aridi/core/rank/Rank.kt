@@ -18,11 +18,11 @@ import javax.persistence.Inheritance
  
 class Rank (
     var name: String,
-    var prefix: String? = null,
+    var prefix: String = "",
     var displayName: String = name,
-    var suffix: String? = null,
+    var suffix: String = "",
     var priority: Int = 0,
-    var color: String? = null,
+    var color: String = "GREEN",
     var defaultRank: Boolean = false,
     var permission: MutableList<String> = mutableListOf(),
     var inheritance: MutableList<String> = mutableListOf(),
