@@ -29,7 +29,8 @@ class Rank (
     var createdAt: Long? = null,
     var hidden: Boolean = false,
     var staff: Boolean = false,
-    var discordId: String? = null
+    var discordId: String? = null,
+    var canBeGrantable: Boolean = true
 
 ) {
 
