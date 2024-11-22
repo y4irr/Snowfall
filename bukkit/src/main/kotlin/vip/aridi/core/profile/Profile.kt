@@ -23,6 +23,7 @@ class Profile(
 
     var frozen = false
     var coins = 0
+    var permissions: MutableList<String> = mutableListOf()
 
     fun flagsForSave(): Boolean {
         ModuleManager.profileModule.updateProfile(this)
