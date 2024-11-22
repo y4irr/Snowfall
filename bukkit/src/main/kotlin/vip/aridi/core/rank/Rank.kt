@@ -19,7 +19,7 @@ import javax.persistence.Inheritance
 class Rank (
     var name: String,
     var prefix: String? = null,
-    var displayName: String? = name,
+    var displayName: String = name,
     var suffix: String? = null,
     var priority: Int = 0,
     var color: String? = null,
