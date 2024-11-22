@@ -105,7 +105,7 @@ class GrantModule: IModule {
     }
 
     fun setProvider(adapter: GrantAdapter?) {
-
+        this.adapter = Optional.ofNullable(adapter)
     }
 
     interface GrantAdapter {
