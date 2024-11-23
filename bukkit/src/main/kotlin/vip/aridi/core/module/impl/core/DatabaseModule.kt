@@ -1,5 +1,6 @@
 package vip.aridi.core.module.impl.core
 
+import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoClients
 import com.mongodb.client.MongoCollection
 import org.bson.Document
@@ -18,7 +19,7 @@ import vip.aridi.core.utils.CC
 
 class DatabaseModule : IModule {
 
-    private var client = MongoClients.create()
+    private lateinit var client: MongoClient
     lateinit var database: com.mongodb.client.MongoDatabase
 
     override fun order(): Int = 2
@@ -27,9 +28,9 @@ class DatabaseModule : IModule {
     override fun load() {
         try {
             val configModule = ConfigurationModule()
-            val uri = configModule.mainConfig.config.getString("DATABASE.URI")
+            val uri = configModule.databaseConfig.config.getString("MONGO.URI")
                 ?: throw IllegalStateException("DATABASE.URI not found in configuration")
-            val dbName = configModule.mainConfig.config.getString("DATABASE.NAME")
+            val dbName = configModule.databaseConfig.config.getString("MONGO.NAME")
                 ?: throw IllegalStateException("DATABASE.NAME not found in configuration")
 
             client = MongoClients.create(uri)

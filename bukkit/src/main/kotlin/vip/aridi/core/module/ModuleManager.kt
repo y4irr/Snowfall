@@ -4,6 +4,7 @@ import vip.aridi.core.utils.CC
 import vip.aridi.core.Snowfall
 import org.bukkit.command.ConsoleCommandSender
 import vip.aridi.core.module.impl.core.ConfigurationModule
+import vip.aridi.core.module.impl.core.DatabaseModule
 import vip.aridi.core.module.impl.core.ProfileModule
 import vip.aridi.core.module.impl.system.*
 
@@ -23,6 +24,7 @@ class ModuleManager(plugin: Snowfall):ModuleLifecycleManager {
     companion object {
         @JvmStatic
         val configModule = ConfigurationModule()
+        val databaseModule = DatabaseModule()
         val profileModule = ProfileModule()
         val rankModule = RankModule()
         val grantModule = GrantModule()

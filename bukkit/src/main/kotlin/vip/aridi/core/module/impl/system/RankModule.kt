@@ -82,7 +82,7 @@ class RankModule: IModule {
 
 
     private fun loadRanks(): Map<String, Rank> {
-        return collection.find()
+        return ModuleManager.databaseModule.getCollection("ranks").find()
             .map { gson.fromJson(it.toJson(), Rank::class.java) }
             .associateBy { it.name }
             .toMutableMap()
@@ -109,9 +109,7 @@ class RankModule: IModule {
 
     fun findAllRanks(): MutableSet<Rank> {
         return CompletableFuture.supplyAsync {
-            val gson = GsonBuilder().registerTypeAdapter(Long::class.java, LongDeserializer).create()
-
-            val cursor = MongoDatabase.getCollection("ranks").find()
+            val cursor = ModuleManager.databaseModule.getCollection("ranks").find()
             val rankSet = mutableSetOf<Rank>()
             cursor.forEach {
                 try {
