@@ -1,11 +1,11 @@
 package vip.aridi.core.module.impl.system
 
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonSyntaxException
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.UpdateOptions
 import org.bson.Document
-import vip.aridi.core.database.MongoDatabase
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.module.ModuleManager
@@ -29,11 +29,10 @@ class RankModule: IModule {
         .registerTypeAdapter(Rank::class.java, RankDeserializer())
         .create()
 
-    private val collection: MongoCollection<Document> = MongoDatabase.getCollection("ranks")
 
     fun getAllRanks(): MutableSet<Rank> {
         val rankSet = mutableSetOf<Rank>()
-        collection.find().forEach { document ->
+        ModuleManager.databaseModule.getCollection("ranks").find().forEach { document ->
             val rank = gson.fromJson(document.toJson(), Rank::class.java)
             rankSet.add(rank)
         }
@@ -41,7 +40,7 @@ class RankModule: IModule {
     }
 
     fun getRankById(id: String): Rank? {
-        val document = collection.find(Document("_id", id)).firstOrNull() ?: return null
+        val document = ModuleManager.databaseModule.getCollection("ranks").find(Document("_id", id)).firstOrNull() ?: return null
         return gson.fromJson(document.toJson(), Rank::class.java)
     }
 
@@ -49,7 +48,7 @@ class RankModule: IModule {
         return cache[id]
     }
     fun updateRank(rank: Rank): Boolean {
-        val updateResult = collection.updateOne(
+        val updateResult = ModuleManager.databaseModule.getCollection("ranks").updateOne(
             Filters.eq("_id", rank.name),
             Document("\$set", Document.parse(gson.toJson(rank))),
             UpdateOptions().upsert(true))
@@ -124,7 +123,7 @@ class RankModule: IModule {
     }
 
     fun deleteRank(id: String): Boolean {
-        val deleteResult = collection.deleteOne(Filters.eq("_id", id))
+        val deleteResult = ModuleManager.databaseModule.getCollection("ranks").deleteOne(Filters.eq("_id", id))
         if (deleteResult.wasAcknowledged()) {
             cache.remove(id)
         }
