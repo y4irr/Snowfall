@@ -11,6 +11,7 @@ import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.module.ModuleManager
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.util.LongDeserializer
+import vip.aridi.core.utils.RankDeserializer
 import java.util.concurrent.CompletableFuture
 
 /*
@@ -22,10 +23,10 @@ import java.util.concurrent.CompletableFuture
  * Date: 14 - nov
  */
 
-class RankModule(): IModule {
+class RankModule: IModule {
 
     private val gson = GsonBuilder()
-        .registerTypeAdapter(Long::class.java, LongDeserializer)
+        .registerTypeAdapter(Rank::class.java, RankDeserializer())
         .create()
 
     private val collection: MongoCollection<Document> = MongoDatabase.getCollection("ranks")
@@ -111,13 +112,16 @@ class RankModule(): IModule {
             val gson = GsonBuilder().registerTypeAdapter(Long::class.java, LongDeserializer).create()
 
             val cursor = MongoDatabase.getCollection("ranks").find()
-
-            val codeSet = mutableSetOf<Rank>()
+            val rankSet = mutableSetOf<Rank>()
             cursor.forEach {
-                val code = gson.fromJson(it.toJson(), Rank::class.java)
-                codeSet.add(code)
+                try {
+                    val rank = gson.fromJson(it.toJson(), Rank::class.java)
+                    rankSet.add(rank)
+                } catch (e: JsonSyntaxException) {
+                    println("Error deserializing Rank: ${e.message}")
+                }
             }
-            codeSet
+            rankSet
         }.join()
     }
 
