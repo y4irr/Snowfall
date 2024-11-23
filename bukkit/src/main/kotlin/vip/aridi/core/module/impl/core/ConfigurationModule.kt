@@ -15,22 +15,15 @@ import vip.aridi.core.module.ModuleCategory
  */
 
 class ConfigurationModule: IModule {
-    lateinit var mainConfig: Configuration
-    lateinit var messagesConfig: Configuration
+    var mainConfig: Configuration = Configuration(Snowfall.get(), "config")
+    var messagesConfig: Configuration = Configuration(Snowfall.get(), "messages")
+    var databaseConfig: Configuration = Configuration(Snowfall.get(), "database")
 
     override fun order(): Int = 1
 
     override fun category(): ModuleCategory = ModuleCategory.CORE
 
     override fun load() {
-        try {
-            mainConfig = Configuration(Snowfall.get(), "config")
-            messagesConfig = Configuration(Snowfall.get(), "messages")
-            Snowfall.get().logger.info("Loaded configuration files successfully.")
-        } catch (e: Exception) {
-            Snowfall.get().logger.severe("Failed to load configuration files: ${e.message}")
-            e.printStackTrace()
-        }
     }
 
     override fun unload() {
