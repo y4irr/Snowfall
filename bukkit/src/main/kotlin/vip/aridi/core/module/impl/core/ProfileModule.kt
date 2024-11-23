@@ -32,9 +32,7 @@ class ProfileModule : IModule {
         return 2
     }
 
-    override fun category(): ModuleCategory {
-        return ModuleCategory.CORE
-    }
+    override fun category(): ModuleCategory = ModuleCategory.CORE
 
     override fun load() {
         val consoleProfile = Profile(CONSOLE_ID, "Console")

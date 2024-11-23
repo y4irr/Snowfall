@@ -16,13 +16,9 @@ import vip.aridi.core.module.ModuleManager
  */
 
 class ManagerModule: IModule {
-    override fun order(): Int {
-        return 6
-    }
+    override fun order(): Int = 6
 
-    override fun category(): ModuleCategory {
-        return ModuleCategory.SYSTEM
-    }
+    override fun category(): ModuleCategory = ModuleCategory.SYSTEM
 
     override fun load() {
         ModuleManager.grantModule.setProvider(GrantBukkitAdapter())

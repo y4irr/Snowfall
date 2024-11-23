@@ -16,13 +16,9 @@ import vip.aridi.core.permissions.listener.PermissionListener
  */
 
 class ListenersModule: IModule {
-    override fun order(): Int {
-        return 4
-    }
+    override fun order(): Int = 4
 
-    override fun category(): ModuleCategory {
-        return ModuleCategory.SYSTEM
-    }
+    override fun category(): ModuleCategory = ModuleCategory.SYSTEM
 
     override fun load() {
         ProfileListener(Snowfall.get())

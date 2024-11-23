@@ -17,13 +17,8 @@ import vip.aridi.core.module.ModuleCategory
  */
 
 class CommandsModule: IModule {
-    override fun order(): Int {
-        return 3
-    }
-
-    override fun category(): ModuleCategory {
-        return ModuleCategory.CORE
-    }
+    override fun order(): Int = 3
+    override fun category(): ModuleCategory = ModuleCategory.CORE
 
     override fun load() {
         val drink: CommandService = Drink.get(Snowfall.get())

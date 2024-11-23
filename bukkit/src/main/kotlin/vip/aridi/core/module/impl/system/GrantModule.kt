@@ -12,6 +12,7 @@ import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.module.ModuleManager
 import vip.aridi.core.rank.Rank
 import java.util.*
+import java.util.concurrent.CompletableFuture
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -35,13 +36,9 @@ class GrantModule: IModule {
     private val gson = Gson()
     private lateinit var collection: MongoCollection<Document>
 
-    override fun order(): Int {
-        return 2
-    }
+    override fun order(): Int = 2
 
-    override fun category(): ModuleCategory {
-        return ModuleCategory.SYSTEM
-    }
+    override fun category(): ModuleCategory = ModuleCategory.SYSTEM
 
     override fun load() {
         collection = MongoDatabase.getCollection("grants")
@@ -66,6 +63,10 @@ class GrantModule: IModule {
     fun grant(rank: Rank, target: UUID, sender: UUID, reason: String, duration: Long): Boolean {
         val grant = Grant(UUID.randomUUID(), rank.name, target, sender, duration, reason)
         return false
+    }
+
+    fun findGrantedRank(uuid: UUID): Rank {
+        return grant[uuid] ?: ModuleManager.rankModule.defaultRank
     }
 
     fun remove(grant: Grant, remover: UUID, reason: String): Boolean {
@@ -102,6 +103,15 @@ class GrantModule: IModule {
 
     fun findProvider(): Optional<GrantAdapter> {
         return adapter
+    }
+
+    fun findAllByPlayer(target: UUID): MutableSet<Grant> {
+        return CompletableFuture.supplyAsync {
+            MongoDatabase.getCollection("grants")
+                .find(Filters.eq("target", target.toString()))
+                .map { gson.fromJson(it.toJson(), Grant::class.java) }
+                .toMutableSet()
+        }.join()
     }
 
     fun setProvider(adapter: GrantAdapter?) {

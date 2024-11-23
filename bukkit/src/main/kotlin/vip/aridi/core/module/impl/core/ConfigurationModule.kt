@@ -18,17 +18,19 @@ class ConfigurationModule: IModule {
     lateinit var mainConfig: Configuration
     lateinit var messagesConfig: Configuration
 
-    override fun order(): Int {
-        return 1
-    }
+    override fun order(): Int = 1
 
-    override fun category(): ModuleCategory {
-        return ModuleCategory.CORE
-    }
+    override fun category(): ModuleCategory = ModuleCategory.CORE
 
     override fun load() {
-        mainConfig = Configuration(Snowfall.get(), "config", "yml")
-        messagesConfig = Configuration(Snowfall.get(), "messages", "yml")
+        try {
+            mainConfig = Configuration(Snowfall.get(), "config")
+            messagesConfig = Configuration(Snowfall.get(), "messages")
+            Snowfall.get().logger.info("Loaded configuration files successfully.")
+        } catch (e: Exception) {
+            Snowfall.get().logger.severe("Failed to load configuration files: ${e.message}")
+            e.printStackTrace()
+        }
     }
 
     override fun unload() {

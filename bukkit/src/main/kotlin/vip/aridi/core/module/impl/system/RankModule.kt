@@ -8,8 +8,10 @@ import org.bson.Document
 import vip.aridi.core.database.MongoDatabase
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
+import vip.aridi.core.module.ModuleManager
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.util.LongDeserializer
+import java.util.concurrent.CompletableFuture
 
 /*
  * This project can't be redistributed without
@@ -57,13 +59,9 @@ class RankModule(): IModule {
 
     lateinit var defaultRank: Rank
 
-    override fun order(): Int {
-        return 1
-    }
+    override fun order(): Int = 1
 
-    override fun category(): ModuleCategory {
-        return ModuleCategory.SYSTEM
-    }
+    override fun category(): ModuleCategory = ModuleCategory.SYSTEM
 
     override fun load() {
         cache.putAll(loadRanks())
@@ -106,6 +104,21 @@ class RankModule(): IModule {
             cache[newDefaultRank.name] = newDefaultRank
         }
         return newDefaultRank
+    }
+
+    fun findAllRanks(): MutableSet<Rank> {
+        return CompletableFuture.supplyAsync {
+            val gson = GsonBuilder().registerTypeAdapter(Long::class.java, LongDeserializer).create()
+
+            val cursor = MongoDatabase.getCollection("ranks").find()
+
+            val codeSet = mutableSetOf<Rank>()
+            cursor.forEach {
+                val code = gson.fromJson(it.toJson(), Rank::class.java)
+                codeSet.add(code)
+            }
+            codeSet
+        }.join()
     }
 
     fun deleteRank(id: String): Boolean {
