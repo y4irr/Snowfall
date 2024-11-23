@@ -2,10 +2,20 @@ package vip.aridi.core.module.impl.core
 
 import com.jonahseguin.drink.CommandService
 import com.jonahseguin.drink.Drink
+import com.jonahseguin.drink.parametric.DrinkProvider
+import net.minecraft.server.v1_8_R3.BlockStairs.c
 import vip.aridi.core.Snowfall
+import vip.aridi.core.command.admin.grants.GrantCommand
+import vip.aridi.core.command.admin.grants.oGrantCommand
 import vip.aridi.core.command.essentials.*
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
+import vip.aridi.core.profile.Profile
+import vip.aridi.core.provider.DurationProvider
+import vip.aridi.core.provider.ProfileProvider
+import vip.aridi.core.provider.RankProvider
+import vip.aridi.core.rank.Rank
+import vip.aridi.core.utils.Duration
 
 /*
  * This project can't be redistributed without
@@ -23,12 +33,18 @@ class CommandsModule: IModule {
     override fun load() {
         val drink: CommandService = Drink.get(Snowfall.get())
 
+        drink.bind(Profile::class.java).toProvider(ProfileProvider())
+        drink.bind(Rank::class.java).toProvider(RankProvider())
+        drink.bind(Duration::class.java).toProvider(DurationProvider())
+
         val commands = mapOf(
             DiscordCommand() to listOf("discord", "dc"),
             TwitterCommand() to listOf("x", "twitter"),
             TeamSpeakCommand() to listOf("teamspeak", "ts"),
             WebsiteCommand() to listOf("website"),
             StoreCommand() to listOf("store"),
+            GrantCommand() to listOf("grant"),
+            oGrantCommand() to listOf("ogrant")
         )
 
         commands.forEach { (commands, aliases) ->
