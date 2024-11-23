@@ -28,7 +28,7 @@ class ProfileModule : IModule {
     private var profilesByName = mutableMapOf<String, Profile>()
 
     override fun order(): Int {
-        return 2
+        return 3
     }
 
     override fun category(): ModuleCategory = ModuleCategory.CORE

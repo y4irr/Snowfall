@@ -25,13 +25,9 @@ import java.lang.reflect.Field
  */
 
 class PermissionModule: IModule {
-    override fun order(): Int {
-        return 5
-    }
+    override fun order(): Int = 4
 
-    override fun category(): ModuleCategory {
-        return ModuleCategory.SYSTEM
-    }
+    override fun category(): ModuleCategory = ModuleCategory.SYSTEM
 
     override fun load() {
         PermissionListener(Snowfall.get())

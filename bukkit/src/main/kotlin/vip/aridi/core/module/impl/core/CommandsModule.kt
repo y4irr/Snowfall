@@ -17,7 +17,7 @@ import vip.aridi.core.module.ModuleCategory
  */
 
 class CommandsModule: IModule {
-    override fun order(): Int = 3
+    override fun order(): Int = 4
     override fun category(): ModuleCategory = ModuleCategory.CORE
 
     override fun load() {

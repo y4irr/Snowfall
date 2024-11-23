@@ -41,7 +41,7 @@ class GrantModule: IModule {
     override fun category(): ModuleCategory = ModuleCategory.SYSTEM
 
     override fun load() {
-        collection = MongoDatabase.getCollection("grants")
+        collection = ModuleManager.databaseModule.getCollection("grants")
     }
 
     override fun unload() {

@@ -16,7 +16,7 @@ import vip.aridi.core.permissions.listener.PermissionListener
  */
 
 class ListenersModule: IModule {
-    override fun order(): Int = 4
+    override fun order(): Int = 3
 
     override fun category(): ModuleCategory = ModuleCategory.SYSTEM
 
