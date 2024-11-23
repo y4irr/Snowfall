@@ -1,7 +1,6 @@
 package vip.aridi.core.profile
 
 import com.mongodb.client.model.Filters
-import vip.aridi.core.database.MongoDatabase
 import vip.aridi.core.module.ModuleManager
 import vip.aridi.core.util.MongoUtil
 import org.bson.Document
@@ -23,6 +22,7 @@ class Profile(
 
     var frozen = false
     var coins = 0
+    var root = false
     var permissions: MutableList<String> = mutableListOf()
 
     fun flagsForSave(): Boolean {
@@ -34,7 +34,7 @@ class Profile(
         profileDocument["frozen"] = frozen
         profileDocument["coins"] = coins
 
-        val result = MongoDatabase.getCollection("profiles").replaceOne(
+        val result = ModuleManager.databaseModule.getCollection("profiles").replaceOne(
             Filters.eq("_id", this.id.toString()),
             profileDocument,
             MongoUtil.REPLACE_OPTIONS
