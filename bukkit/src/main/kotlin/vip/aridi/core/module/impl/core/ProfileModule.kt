@@ -1,7 +1,6 @@
 package vip.aridi.core.module.impl.core
 
 import com.mongodb.client.model.Filters
-import vip.aridi.core.database.MongoDatabase
 import vip.aridi.core.module.IModule
 import vip.aridi.core.profile.Profile
 import org.bson.Document
@@ -82,13 +81,13 @@ class ProfileModule : IModule {
     }
 
     fun getProfiles(): List<Profile> {
-        return MongoDatabase.getCollection("profiles").find().mapNotNull {
+        return ModuleManager.databaseModule.getCollection("profiles").find().mapNotNull {
             fromDocument(it)
         }.toList()
     }
 
     fun loadProfile(name: String): Profile? {
-        val document = MongoDatabase.getCollection("profiles").find(Filters.eq("name", name)).first()
+        val document = ModuleManager.databaseModule.getCollection("profiles").find(Filters.eq("name", name)).first()
 
         if (document == null) {
             val profile = Profile(Bukkit.getOfflinePlayer(name).uniqueId, name)
@@ -100,7 +99,7 @@ class ProfileModule : IModule {
     }
 
     fun loadProfile(id: UUID): Profile? {
-        val document = MongoDatabase.getCollection("profiles").find(Filters.eq("_id", id.toString())).first()
+        val document = ModuleManager.databaseModule.getCollection("profiles").find(Filters.eq("_id", id.toString())).first()
 
         if (document == null) {
             val profile = Profile(id, Bukkit.getOfflinePlayer(id).name ?: "Unknown")
