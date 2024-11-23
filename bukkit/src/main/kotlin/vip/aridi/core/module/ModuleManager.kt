@@ -58,6 +58,7 @@ class ModuleManager(plugin: Snowfall):ModuleLifecycleManager {
 
     private fun initModules() {
         addModules(configModule)
+        addModules(databaseModule)
         addModules(profileModule)
         addModules(listenerModule)
         addModules(rankModule)
@@ -87,7 +88,9 @@ class ModuleManager(plugin: Snowfall):ModuleLifecycleManager {
 
 
     override fun unloadModules() {
-        modules.sortedByDescending { it.order() }.forEach {
+        modules.sortedByDescending {
+            it.category().order
+            it.order() }.forEach {
             it.unload()
             console.sendMessage(CC.translate("&7[&bModule System&7] &c${it.moduleName()} module has been disabled successfully"))
         }
