@@ -3,6 +3,7 @@ package vip.aridi.core.module
 import vip.aridi.core.utils.CC
 import vip.aridi.core.Snowfall
 import org.bukkit.command.ConsoleCommandSender
+import vip.aridi.core.module.impl.core.CommandsModule
 import vip.aridi.core.module.impl.core.ConfigurationModule
 import vip.aridi.core.module.impl.core.DatabaseModule
 import vip.aridi.core.module.impl.core.ProfileModule
@@ -30,7 +31,7 @@ class ModuleManager(plugin: Snowfall):ModuleLifecycleManager {
         val grantModule = GrantModule()
         val permissionModule = PermissionModule()
     }
-
+    val commandsModule = CommandsModule()
     val listenerModule = ListenersModule()
     val managerModule = ManagerModule()
 
@@ -63,6 +64,7 @@ class ModuleManager(plugin: Snowfall):ModuleLifecycleManager {
         addModules(grantModule)
         addModules(permissionModule)
         addModules(managerModule)
+        addModules(commandsModule)
     }
 
     override fun enabled() {
