@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
 import org.bson.Document
-import vip.aridi.core.database.MongoDatabase
 import vip.aridi.core.grant.Grant
 import vip.aridi.core.grant.service.GrantExpiryService
 import vip.aridi.core.module.IModule
@@ -107,7 +106,7 @@ class GrantModule: IModule {
 
     fun findAllByPlayer(target: UUID): MutableSet<Grant> {
         return CompletableFuture.supplyAsync {
-            MongoDatabase.getCollection("grants")
+            ModuleManager.databaseModule.getCollection("grants")
                 .find(Filters.eq("target", target.toString()))
                 .map { gson.fromJson(it.toJson(), Grant::class.java) }
                 .toMutableSet()
