@@ -44,11 +44,11 @@ publishing {
 }
 
 tasks.withType(Jar).configureEach {
-    destinationDirectory = file("C:\\Users\\Yair\\Desktop\\rwar\\plugins")
+    destinationDirectory = file("${buildDir}/libs")
     archiveFileName = "${project.name}-${project.version}.jar"
 }
 
 tasks.withType(com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar).configureEach {
-    destinationDirectory = file("C:\\Users\\Yair\\Desktop\\rwar\\plugins")
+    destinationDirectory = file("${buildDir}/libs")
     archiveFileName = "${project.name}-${project.version}-all.jar"
 }

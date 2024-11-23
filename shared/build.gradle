@@ -1,4 +1,5 @@
 plugins {
+    id 'java'
     id 'idea'
     id 'maven-publish'
     id 'org.jetbrains.kotlin.kapt' version '1.9.22'
@@ -9,7 +10,7 @@ plugins {
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url 'https://maven.elmakers.com/repository/' }
+    maven { url = uri('https://maven.elmakers.com/repository/') }
 }
 
 dependencies {
@@ -21,7 +22,7 @@ dependencies {
     implementation fileTree(dir: '.lib', include: '*.jar')
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
@@ -39,18 +40,18 @@ publishing {
     }
     repositories {
         maven {
-            name = 'local'
+            name = "local"
             url = uri("${buildDir}/output")
         }
     }
 }
 
-tasks.withType(Jar).configureEach {
-    destinationDirectory = file("C:\\Users\\Yair\\Desktop\\rwar\\plugins")
-    archiveFileName = "${project.name}-${project.version}.jar"
+tasks.named('jar', Jar) {
+    destinationDirectory.set(file("${buildDir}/libs"))
+    archiveFileName.set("${project.name}-${project.version}.jar")
 }
 
-tasks.withType(com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar).configureEach {
-    destinationDirectory = file("C:\\Users\\Yair\\Desktop\\rwar\\plugins")
-    archiveFileName = "${project.name}-${project.version}-all.jar"
+tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+    destinationDirectory.set(file("${buildDir}/libs"))
+    archiveFileName.set("${project.name}-${project.version}-all.jar")
 }

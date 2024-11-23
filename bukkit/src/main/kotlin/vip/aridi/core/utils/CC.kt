@@ -50,7 +50,17 @@ object CC  {
     }
 
     @JvmStatic
-    fun translate(list: List<String>): List<String> {
+    fun translateList(list: List<String>): List<String> {
+        return list.stream().map { translate(it) }.collect(Collectors.toList())
+    }
+
+    @JvmStatic
+    fun translateMutable(list: MutableList<String>): MutableList<String> {
+        return list.stream().map { translate(it) }.collect(Collectors.toList())
+    }
+
+    @JvmStatic
+    fun translate(list: ArrayList<String>): MutableList<String> {
         return list.stream().map { translate(it) }.collect(Collectors.toList())
     }
 
