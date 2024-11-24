@@ -63,7 +63,9 @@ class GrantModule: IModule {
 
     fun grant(rank: Rank, target: UUID, sender: UUID, reason: String, duration: Long): Boolean {
         val grant = Grant(UUID.randomUUID(), rank.name, target, sender, duration, reason)
-        return false
+
+        update(grant)
+        return true
     }
 
     fun findGrantedRank(uuid: UUID): Rank {
@@ -75,7 +77,7 @@ class GrantModule: IModule {
         grant.removedAt = System.currentTimeMillis()
         grant.removedReason = reason
 
-        return false
+        return update(grant)
     }
 
     fun deleteGrantById(id: UUID): Boolean {
@@ -106,6 +108,19 @@ class GrantModule: IModule {
         return adapter
     }
 
+    fun update(value: Grant): Boolean {
+        return ModuleManager.databaseModule.getCollection("grants").updateOne(
+            Filters.eq("_id", value.id.toString()),
+            Document("\$set", Document.parse(gson.toJson(value))),
+            UpdateOptions().upsert(true)
+        ).wasAcknowledged()
+    }
+
+    fun delete(value: Grant): Boolean {
+        return ModuleManager.databaseModule.getCollection("grants").deleteOne(
+            Filters.eq("_id", value.id.toString())
+        ).wasAcknowledged()
+    }
     fun findAllByPlayer(target: UUID): MutableSet<Grant> {
         return CompletableFuture.supplyAsync {
             ModuleManager.databaseModule.getCollection("grants")
