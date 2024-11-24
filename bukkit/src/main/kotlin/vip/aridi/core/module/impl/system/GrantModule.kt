@@ -10,6 +10,7 @@ import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.module.ModuleManager
 import vip.aridi.core.rank.Rank
+import vip.aridi.core.utils.gson.GrantDeserializer
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import kotlin.collections.ArrayList
