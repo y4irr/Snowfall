@@ -22,7 +22,7 @@ import vip.aridi.core.utils.CC
 
 class GrantsCommand {
 
-    @Command(name = "grants", desc = "View all granted ranks of player")
+    @Command(name = "", desc = "View all granted ranks of player")
     @Require("snowfall.admin.grants")
     fun grants(
         @Sender sender: CommandSender,
