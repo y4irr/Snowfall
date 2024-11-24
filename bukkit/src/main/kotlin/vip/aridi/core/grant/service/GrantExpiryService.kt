@@ -12,12 +12,13 @@ import java.util.UUID
  * @author Yair © 2024
  * Date: 15 - nov
  */
-
 class GrantExpiryService: Runnable {
     private val module = ModuleManager.grantModule
 
     override fun run() {
         val expiredGrants = mutableListOf<Pair<UUID, Grant>>()
+
+        if (module.active == emptyMap<UUID, ArrayList<Grant>>()) return
 
         module.active.entries.removeIf { (uuid, grants) ->
             val validGrants = grants.filterNot { grant ->
