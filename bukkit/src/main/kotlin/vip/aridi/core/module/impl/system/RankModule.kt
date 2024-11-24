@@ -2,7 +2,6 @@ package vip.aridi.core.module.impl.system
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
-import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.UpdateOptions
 import org.bson.Document
@@ -10,8 +9,7 @@ import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.module.ModuleManager
 import vip.aridi.core.rank.Rank
-import vip.aridi.core.util.LongDeserializer
-import vip.aridi.core.utils.RankDeserializer
+import vip.aridi.core.utils.gson.RankDeserializer
 import java.util.concurrent.CompletableFuture
 
 /*
