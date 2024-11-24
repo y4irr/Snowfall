@@ -124,7 +124,7 @@ class GrantModule: IModule {
     fun findAllByPlayer(target: UUID): MutableSet<Grant> {
         return CompletableFuture.supplyAsync {
             ModuleManager.databaseModule.getCollection("grants")
-                .find(Filters.eq("target", target.toString()))
+                .find(Filters.eq("targetId", target.toString()))
                 .map { gson.fromJson(it.toJson(), Grant::class.java) }
                 .toMutableSet()
         }.join()
