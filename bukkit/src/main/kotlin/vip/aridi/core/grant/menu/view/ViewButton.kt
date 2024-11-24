@@ -3,9 +3,13 @@ package vip.aridi.core.grant.menu.view
 import org.bukkit.ChatColor
 import org.bukkit.DyeColor
 import org.bukkit.Material
+import org.bukkit.conversations.ConversationFactory
+import org.bukkit.conversations.NullConversationPrefix
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
+import vip.aridi.core.Snowfall
 import vip.aridi.core.grant.Grant
+import vip.aridi.core.grant.prompt.GrantRemoveReasonPrompt
 import vip.aridi.core.module.ModuleManager
 import vip.aridi.core.module.impl.core.ProfileModule
 import vip.aridi.core.profile.Profile
@@ -93,7 +97,9 @@ class ViewButton(
     }
 
     override fun clicked(player: Player, slot: Int, clickType: ClickType?) {
-        if (grant.rankId == "Default") return
+        if (grant.rankId == "Default") {
+            return
+        }
 
         val senderProfile = ModuleManager.profileModule.getProfile(player.uniqueId) ?: return
 
@@ -104,5 +110,19 @@ class ViewButton(
                 GrantsMenu(ModuleManager.grantModule.findAllByPlayer(target.id), target).openMenu(player)
             }
         }
+
+        player.closeInventory()
+        player.beginConversation(ConversationFactory(Snowfall.get())
+            .withModality(true)
+            .withPrefix(NullConversationPrefix())
+            .withFirstPrompt(GrantRemoveReasonPrompt(grant, target, player))
+            .withEscapeSequence("/no")
+            .withLocalEcho(false)
+            .withTimeout(25)
+            .thatExcludesNonPlayersWithMessage("No console allowed")
+            .buildConversation(player)
+        )
     }
+
+
 }
