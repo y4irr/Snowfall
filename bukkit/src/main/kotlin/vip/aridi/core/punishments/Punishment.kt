@@ -22,10 +22,9 @@ class Punishment {
     private val activePunishments = mutableMapOf<UUID, PunishmentData>()
     private val gson = GsonBuilder().setPrettyPrinting().create()
     private val punishmentLogs = mutableListOf<PunishmentLog>()
-    private val collection = ModuleManager.databaseModule.getCollection("punishments")
 
     fun loadPunishments() {
-        val cursor = collection.find().iterator()
+        val cursor = ModuleManager.databaseModule.getCollection("punishments").find().iterator()
         cursor.use {
             while (cursor.hasNext()) {
                 val punishmentData = gson.fromJson(cursor.next().toJson(), PunishmentData::class.java)
@@ -91,7 +90,7 @@ class Punishment {
     }
     private fun savePunishment(punishmentData: PunishmentData): Boolean {
         activePunishments[punishmentData.id] = punishmentData
-        return collection.updateOne(
+        return ModuleManager.databaseModule.getCollection("punishments").updateOne(
             Filters.eq("_id", punishmentData.id.toString()),
             Document("\$set", Document.parse(gson.toJson(punishmentData))),
             UpdateOptions().upsert(true)
