@@ -22,6 +22,6 @@ enum class PunishmentType(
     BLACKLIST(true, "blacklisted", "§4", 0);
 
     fun permission(pardon: Boolean, isIP: Boolean = false): String {
-        return "core.punishment.${if (isIP) "ip" else ""}${name.lowercase()}${if (pardon) ".pardon" else ""}"
+        return "snowfall.punishment.${if (isIP) "ip" else ""}${name.lowercase()}${if (pardon) ".pardon" else ""}"
     }
 }
