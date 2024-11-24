@@ -32,7 +32,9 @@ class GrantModule: IModule {
     //Expiry Service
 
     private var adapter: Optional<GrantAdapter> = Optional.empty()
-    private val gson = Gson()
+    private val gson = GsonBuilder()
+        .registerTypeAdapter(Grant::class.java, GrantDeserializer())
+        .create()
     private lateinit var collection: MongoCollection<Document>
 
     override fun order(): Int = 2
