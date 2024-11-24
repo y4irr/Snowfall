@@ -1,0 +1,14 @@
+Grant Permissions:
+  snowfall.admin.grant
+
+Punishment Permissions:
+  snowfall.punishment.kick
+  snowfall.punishment.ipban
+  snowfall.punishment.blacklist
+  snowfall.punishment.mute
+  snowfall.punishment.warn
+  snowfall.punishment.pardon.kick
+  snowfall.punishment.pardon.ipban
+  snowfall.punishment.pardon.blacklist
+  snowfall.punishment.pardon.mute
+  snowfall.punishment.pardon.warn
