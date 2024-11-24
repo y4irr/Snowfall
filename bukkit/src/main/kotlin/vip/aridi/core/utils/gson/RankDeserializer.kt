@@ -1,4 +1,4 @@
-package vip.aridi.core.utils
+package vip.aridi.core.utils.gson
 
 import com.google.gson.*
 import java.lang.reflect.Type
