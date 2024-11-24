@@ -30,6 +30,7 @@ class ModuleManager(plugin: Snowfall):ModuleLifecycleManager {
         val rankModule = RankModule()
         val grantModule = GrantModule()
         val permissionModule = PermissionModule()
+        val punishmentModule = PunishmentModule()
     }
     private val commandsModule = CommandsModule()
     private val listenerModule = ListenersModule()
@@ -65,6 +66,7 @@ class ModuleManager(plugin: Snowfall):ModuleLifecycleManager {
         addModules(grantModule)
         addModules(permissionModule)
         addModules(managerModule)
+        addModules(punishmentModule)
         addModules(commandsModule)
     }
 
