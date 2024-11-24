@@ -1,12 +1,5 @@
 package vip.aridi.core.rank
 
-import com.avaje.ebeaninternal.server.lib.sql.Prefix
-import com.avaje.ebeaninternal.server.subclass.GenSuffix
-import org.apache.logging.log4j.core.net.Priority
-import vip.aridi.core.Snowfall
-import vip.aridi.core.module.ModuleManager
-import javax.persistence.Inheritance
-
 /*
  * This project can't be redistributed without
  * authorization of the developer
@@ -28,6 +21,8 @@ class Rank (
     var inheritance: MutableList<String> = mutableListOf(),
     var createdAt: Long? = null,
     var hidden: Boolean = false,
+    var donator: Boolean = false,
+    var media: Boolean = false,
     var staff: Boolean = false,
     var discordId: String? = null,
     var price: Int = 0,
