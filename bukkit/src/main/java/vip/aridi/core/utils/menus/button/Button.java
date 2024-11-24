@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import vip.aridi.core.utils.CC;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -110,7 +111,7 @@ public abstract class Button {
     public ItemStack getButtonItem(Player player) {
         ItemStack buttonItem = new ItemStack(this.getMaterial(player), this.getAmount(player), (short)this.getDamageValue(player));
         ItemMeta meta = buttonItem.getItemMeta();
-        meta.setDisplayName(this.getName(player));
+        meta.setDisplayName(CC.translate(this.getName(player)));
         List<String> description = this.getDescription(player);
         if (description != null) {
             meta.setLore(description.stream().map(it -> ChatColor.translateAlternateColorCodes('&',it)).collect(Collectors.toList()));
