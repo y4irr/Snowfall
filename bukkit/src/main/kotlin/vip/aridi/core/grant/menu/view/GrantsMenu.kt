@@ -30,7 +30,7 @@ class GrantsMenu(
 
     override fun getPrePaginatedTitle(player: Player?): String {
         val rank = ModuleManager.grantModule.findGrantedRank(profile.id)
-        return CC.translate("${rank.color}${profile.name}&7's grants")
+        return CC.translate("${ChatColor.valueOf(rank.color)}${profile.name}&7's grants")
     }
 
     override fun getAllPagesButtons(player: Player): MutableMap<Int, Button> {
