@@ -44,7 +44,7 @@ abstract class AbstractGrantProcessPrompt(
         }
     }
 
-    override fun acceptInput(context: ConversationContext, input: String): Prompt {
+    override fun acceptInput(context: ConversationContext, input: String): Prompt? {
         if (input.equals("cancel", ignoreCase = true)) {
             onProcessCancelled(currentStep)
             return END_OF_CONVERSATION
@@ -64,8 +64,8 @@ abstract class AbstractGrantProcessPrompt(
                     return END_OF_CONVERSATION
                 }
                 ConfirmMenu("Confirm Grant?", object : Callback<Boolean> {
-                    override fun callback(confirmed: Boolean) {
-                        if (confirmed) onGrantConfirmed(duration)
+                    override fun callback(callback: Boolean) {
+                        if (callback) onGrantConfirmed(duration)
                         else sender.closeInventory()
                     }
                 }).openMenu(sender)
