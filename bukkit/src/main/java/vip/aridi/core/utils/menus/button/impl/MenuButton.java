@@ -1,13 +1,8 @@
 package vip.aridi.core.utils.menus.button.impl;
 
-/*
- * Author: T4yrn © 2024
- * Project: nexus
- * Date: 6/3/2024 - 22:46
- */
-
-import dev.ryu.core.bukkit.util.ItemUtils;
-import dev.ryu.core.bukkit.util.enchantment.GlowEnchantment;
+import vip.aridi.core.utils.CC;
+import vip.aridi.core.utils.GlowEnchantment;
+import vip.aridi.core.utils.ItemUtils;
 import vip.aridi.core.utils.menus.button.Button;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -74,7 +69,7 @@ public class MenuButton extends Button {
     }
 
     public MenuButton name(String name) {
-        this.name = name;
+        this.name = CC.translate(name);
         return this;
     }
 
@@ -114,7 +109,7 @@ public class MenuButton extends Button {
     }
 
     public MenuButton lore(List<String> lore) {
-        this.lore = new ArrayList<>(lore);
+        this.lore = new ArrayList<>(CC.translateList(lore));
         return this;
     }
 

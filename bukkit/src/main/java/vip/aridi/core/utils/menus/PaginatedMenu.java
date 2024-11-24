@@ -1,5 +1,6 @@
 package vip.aridi.core.utils.menus;
 
+import vip.aridi.core.utils.CC;
 import vip.aridi.core.utils.menus.button.impl.PageButton;
 import vip.aridi.core.utils.menus.button.Button;
 import org.bukkit.entity.Player;
@@ -35,7 +36,7 @@ public abstract class PaginatedMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return getPrePaginatedTitle(player) + " - " + page + "/" + getPages(player);
+        return CC.translate(getPrePaginatedTitle(player) + " - " + page + "/" + getPages(player));
     }
 
     public final void modPage(Player player, int mod) {

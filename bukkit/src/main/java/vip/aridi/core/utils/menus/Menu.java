@@ -1,6 +1,7 @@
 package vip.aridi.core.utils.menus;
 
 import vip.aridi.core.Snowfall;
+import vip.aridi.core.utils.CC;
 import vip.aridi.core.utils.menus.button.Button;
 import vip.aridi.core.utils.menus.listener.ButtonListener;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
@@ -84,7 +85,7 @@ public abstract class Menu {
     }
 
     private Inventory createInventory(Player player) {
-        final Inventory inventory = Core.Companion.get().getServer().createInventory(player, size(player), getTitle(player));
+        final Inventory inventory = Snowfall.Companion.get().getServer().createInventory(player, size(player), CC.translate(getTitle(player)));
 
         for (Map.Entry<Integer, Button> buttonEntry : getButtons(player).entrySet()) {
             this.buttons.put(buttonEntry.getKey(), buttonEntry.getValue());
@@ -162,7 +163,7 @@ public abstract class Menu {
             }
         };
 
-        runnable.runTaskTimer(Core.Companion.get(), 10L, 10L);
+        runnable.runTaskTimer(Snowfall.Companion.get(), 10L, 10L);
         checkTasks.put(player.getUniqueId(), runnable);
     }
 

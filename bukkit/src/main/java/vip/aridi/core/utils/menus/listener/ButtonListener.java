@@ -1,7 +1,7 @@
 package vip.aridi.core.utils.menus.listener;
 
+import vip.aridi.core.Snowfall;
 import vip.aridi.core.utils.menus.Menu;
-import dev.ryu.core.bukkit.Core;
 import vip.aridi.core.utils.menus.button.Button;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,7 +42,7 @@ public class ButtonListener implements Listener {
             }
             if (openMenu.getButtons().containsKey(event.getSlot())) {
 
-                player.setMetadata("CLICKED_BUTTON",new FixedMetadataValue(Core.Companion.get(),player.getUniqueId().toString()));
+                player.setMetadata("CLICKED_BUTTON",new FixedMetadataValue(Snowfall.Companion.get(),player.getUniqueId().toString()));
 
                 final Button button = openMenu.getButtons().get(event.getSlot());
 
@@ -74,10 +74,10 @@ public class ButtonListener implements Listener {
                 }
 
                 if (event.isCancelled()) {
-                    Core.Companion.get().getServer().getScheduler().runTaskLater(Core.Companion.get(), player::updateInventory, 1L);
+                    Snowfall.Companion.get().getServer().getScheduler().runTaskLater(Snowfall.Companion.get(), player::updateInventory, 1L);
                 }
 
-                player.removeMetadata("CLICKED_BUTTON", Core.Companion.get());
+                player.removeMetadata("CLICKED_BUTTON", Snowfall.Companion.get());
 
             } else {
                 if ((event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT)) {

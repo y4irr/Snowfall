@@ -1,6 +1,6 @@
 package vip.aridi.core.utils.menus.button.impl;
 
-import dev.ryu.core.bukkit.util.Callback;
+import vip.aridi.core.util.Callback;
 import vip.aridi.core.utils.menus.button.Button;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

@@ -1,6 +1,6 @@
 package vip.aridi.core.utils.menus;
 
-import dev.ryu.core.bukkit.util.Callback;
+import vip.aridi.core.util.Callback;
 import vip.aridi.core.utils.menus.button.Button;
 import vip.aridi.core.utils.menus.button.impl.BooleanButton;
 import org.bukkit.Material;
@@ -11,8 +11,8 @@ import java.util.Map;
 
 public class ConfirmMenu extends Menu {
 
-    private String title;
-    private Callback<Boolean> response;
+    private final String title;
+    private final Callback<Boolean> response;
 
     public ConfirmMenu(String title, Callback<Boolean> response) {
         this.title = title;
@@ -32,7 +32,7 @@ public class ConfirmMenu extends Menu {
             } else if (i == 5) {
                 buttons.put(i, new BooleanButton(false, this.response));
             } else {
-                buttons.put(i, Button.placeholder(Material.STAINED_GLASS_PANE, (byte) 14, new String[0]));
+                buttons.put(i, Button.placeholder(Material.STAINED_GLASS_PANE, (byte) 14));
             }
         }
 
