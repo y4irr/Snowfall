@@ -6,6 +6,7 @@ import com.jonahseguin.drink.parametric.DrinkProvider
 import net.minecraft.server.v1_8_R3.BlockStairs.c
 import vip.aridi.core.Snowfall
 import vip.aridi.core.command.admin.grants.GrantCommand
+import vip.aridi.core.command.admin.grants.GrantsCommand
 import vip.aridi.core.command.admin.grants.oGrantCommand
 import vip.aridi.core.command.essentials.*
 import vip.aridi.core.module.IModule
@@ -44,6 +45,7 @@ class CommandsModule: IModule {
             WebsiteCommand() to listOf("website"),
             StoreCommand() to listOf("store"),
             GrantCommand() to listOf("grant"),
+            GrantsCommand() to listOf("grants"),
             oGrantCommand() to listOf("ogrant")
         )
 
