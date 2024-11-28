@@ -43,6 +43,8 @@ class CommandsModule: IModule {
             TeamSpeakCommand() to listOf("teamspeak", "ts"),
             WebsiteCommand() to listOf("website"),
             StoreCommand() to listOf("store"),
+            LoreCommand() to listOf("lore"),
+            ListCommand() to listOf("list"),
             GrantCommand() to listOf("grant"),
             GrantsCommand() to listOf("grants"),
             oGrantCommand() to listOf("ogrant"),
