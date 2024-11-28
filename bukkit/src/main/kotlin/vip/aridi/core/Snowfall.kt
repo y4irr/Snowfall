@@ -29,5 +29,8 @@ class Snowfall: JavaPlugin() {
         fun get(): Snowfall {
             return getPlugin(Snowfall::class.java)
         }
+
+        const val UPDATE_PERMISSION: String = "IlgHL-G5aAjB-ADp1O9l-zDD"
+        const val UPDATE_NAME: String = "U4WJ9-Ypw4XO-61cSk7t-N2R"
     }
 }

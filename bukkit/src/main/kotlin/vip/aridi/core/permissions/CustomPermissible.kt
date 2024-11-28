@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap
 class CustomPermissible(player: Player) : PermissibleBase(player) {
 
     private val uuid = player.uniqueId
-    private val permissions = ConcurrentHashMap<String, Boolean>()
+    val permissions = ConcurrentHashMap<String, Boolean>()
 
     init {
         calculatePermissions(false)
