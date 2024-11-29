@@ -9,6 +9,7 @@ import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.module.ModuleManager
 import vip.aridi.core.rank.Rank
+import vip.aridi.core.star.StarRankListener
 import vip.aridi.core.utils.gson.RankDeserializer
 import java.util.concurrent.CompletableFuture
 
@@ -64,6 +65,7 @@ class RankModule: IModule {
     override fun load() {
         cache.putAll(loadRanks())
         defaultRank = loadDefaultRank()
+        ModuleManager.databaseModule.redisAPI.addListener(StarRankListener())
     }
 
     override fun unload() {

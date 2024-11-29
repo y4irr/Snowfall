@@ -13,6 +13,7 @@ import vip.aridi.core.permissions.CustomPermissible
 import vip.aridi.core.permissions.PermissionUpdateEvent
 import vip.aridi.core.permissions.listener.PermissionListener
 import vip.aridi.core.profile.Profile
+import vip.aridi.core.star.StarPermissionListener
 import java.lang.reflect.Field
 
 /*
@@ -31,7 +32,7 @@ class PermissionModule: IModule {
 
     override fun load() {
         PermissionListener(Snowfall.get())
-        //dev.ryu.core.shared.Shared.backendManager.getJupiter().addListener(PermissionOrbitListener()) we import this to add the listener API to REDIS
+        ModuleManager.databaseModule.redisAPI.addListener(StarPermissionListener())
     }
 
     override fun unload() {

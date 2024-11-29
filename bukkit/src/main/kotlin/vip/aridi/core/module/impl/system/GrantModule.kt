@@ -12,6 +12,7 @@ import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.module.ModuleManager
 import vip.aridi.core.rank.Rank
+import vip.aridi.core.star.StarGrantListener
 import vip.aridi.core.utils.gson.GrantDeserializer
 import java.util.*
 import java.util.concurrent.CompletableFuture
@@ -46,6 +47,7 @@ class GrantModule: IModule {
 
     override fun load() {
         collection = ModuleManager.databaseModule.getCollection("grants")
+        ModuleManager.databaseModule.redisAPI.addListener(StarGrantListener())
     }
 
     override fun unload() {
