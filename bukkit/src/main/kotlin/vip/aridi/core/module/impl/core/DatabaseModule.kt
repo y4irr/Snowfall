@@ -1,12 +1,16 @@
 package vip.aridi.core.module.impl.core
 
+import com.google.gson.Gson
 import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoClients
 import com.mongodb.client.MongoCollection
 import org.bson.Document
+import redis.clients.jedis.JedisPool
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.utils.CC
+import vip.aridi.star.RedisStarAPI
+import vip.aridi.star.StarAPI
 
 /*
  * This project can't be redistributed without
@@ -21,6 +25,8 @@ class DatabaseModule : IModule {
 
     private lateinit var client: MongoClient
     lateinit var database: com.mongodb.client.MongoDatabase
+    lateinit var jedisPool: JedisPool
+    lateinit var redisAPI: StarAPI
 
     override fun order(): Int = 2
     override fun category(): ModuleCategory = ModuleCategory.CORE
@@ -35,6 +41,16 @@ class DatabaseModule : IModule {
 
             client = MongoClients.create(uri)
             database = client.getDatabase(dbName)
+            jedisPool = JedisPool(
+                configModule.databaseConfig.config.getString("REDIS.IP"),
+                configModule.databaseConfig.config.getInt("REDIS.PORT")
+            )
+            redisAPI = RedisStarAPI(
+                Gson(),
+                jedisPool,
+                configModule.databaseConfig.config.getString("REDIS.CHANNEL"),
+                configModule.databaseConfig.config.getString("REDIS.PASSWORD")
+            )
 
             println(CC.translate("&7[&bDatabase System&7] &aSuccessfully connected to database: $dbName"))
         } catch (e: Exception) {
