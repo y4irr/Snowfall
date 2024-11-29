@@ -23,7 +23,7 @@ import java.util.concurrent.CompletableFuture
 
 class RankModule: IModule {
 
-    private val gson = GsonBuilder()
+    val gson = GsonBuilder()
         .registerTypeAdapter(Rank::class.java, RankDeserializer())
         .create()
 
