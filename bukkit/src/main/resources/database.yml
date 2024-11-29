@@ -1,3 +1,8 @@
+REDIS:
+  IP: 127.0.0.1
+  PORT: 6379
+  CHANNEL: "snowfall"
+  PASSWORD: ""
 MONGO:
   URI: "mongodb://admin:4gMTH1MjFp50Cq97rhHx2f@23.230.3.42:27017/?authSource=admin"
   NAME: "snowfall"
