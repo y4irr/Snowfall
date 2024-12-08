@@ -5,9 +5,9 @@ package vip.aridi.core
  * authorization of the developer
  *
  * Project @ Snowfall
- * @author Yair © 2024
- * Date: 13 - nov
+ * @author YairSoto © 2024
+ * Date: 08 - dic
  */
 
-class a {
+class Proxy {
 }
