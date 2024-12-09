@@ -7,12 +7,12 @@ import org.bukkit.conversations.NullConversationPrefix
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import vip.aridi.core.Snowfall
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.rank.menus.RankEditor
 import vip.aridi.core.rank.prompt.RankModifyPrompt
 import vip.aridi.core.utils.UnicodeUtil
-import vip.aridi.core.utils.menus.Menu
 import vip.aridi.core.utils.menus.PaginatedMenu
 import vip.aridi.core.utils.menus.button.Button
 import vip.aridi.core.utils.menus.button.impl.GlassButton
@@ -62,7 +62,7 @@ class RankPermissions(
 
                     override fun clicked(player: Player, slot: Int, clickType: ClickType) {
                         this@RankPermissions.rank.permission.remove(permission)
-                        ModuleManager.rankModule.updateRank(rank)
+                        SharedManager.rankModule.updateRank(rank)
                     }
                 }
             }
@@ -73,7 +73,7 @@ class RankPermissions(
         return hashMapOf<Int, Button>().also { toReturn ->
             for (i in 0..8) {
                 toReturn[getSlot(i, 0)] = GlassButton(0)
-                toReturn[getSlot(i, 4)] = GlassButton(0)
+                toReturn[getSlot(i, 2)] = GlassButton(0)
             }
 
             toReturn[4] = MenuButton()
@@ -121,6 +121,6 @@ class RankPermissions(
     }
 
     override fun size(player: Player?): Int {
-        return 18
+        return 27
     }
 }

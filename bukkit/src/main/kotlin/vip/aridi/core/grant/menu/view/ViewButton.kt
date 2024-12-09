@@ -10,10 +10,11 @@ import org.bukkit.event.inventory.ClickType
 import vip.aridi.core.Snowfall
 import vip.aridi.core.grant.Grant
 import vip.aridi.core.grant.prompt.GrantRemoveReasonPrompt
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.module.impl.core.ProfileModule
 import vip.aridi.core.profile.Profile
-import vip.aridi.core.util.TimeUtil
+import vip.aridi.core.utils.TimeUtil
 import vip.aridi.core.utils.CC
 import vip.aridi.core.utils.UnicodeUtil
 import vip.aridi.core.utils.menus.button.Button
@@ -57,8 +58,8 @@ class ViewButton(
         val senderName = if (grant.senderId == ProfileModule.CONSOLE_ID) {
             "&r&lConsole"
         } else {
-            val senderRank = ModuleManager.grantModule.findGrantedRank(grant.senderId)
-            "${ChatColor.valueOf(senderRank.color)}${ModuleManager.profileModule.getProfile(grant.senderId)?.name}"
+            val senderRank = SharedManager.grantModule.findGrantedRank(grant.senderId)
+            "${ChatColor.valueOf(senderRank.color)}${BukkitManager.profileModule.getProfile(grant.senderId)?.name}"
         }
         add(" &f${UnicodeUtil.VERTICAL_LINE} &eBy&7: $senderName")
         add(" &f${UnicodeUtil.VERTICAL_LINE} &eRank&7: &f${rank?.displayName}")
@@ -72,7 +73,7 @@ class ViewButton(
         add("")
         add("&c&lRemoved")
         add("")
-        val removerProfile = ModuleManager.profileModule.getProfile(grant.removerId!!) ?: return
+        val removerProfile = BukkitManager.profileModule.getProfile(grant.removerId!!) ?: return
         add(" &f${UnicodeUtil.VERTICAL_LINE} &eBy&7: &f${removerProfile.name}")
         add(" &f${UnicodeUtil.VERTICAL_LINE} &eReason&7: &f${grant.removedReason}")
         add("")
@@ -101,13 +102,13 @@ class ViewButton(
             return
         }
 
-        val senderProfile = ModuleManager.profileModule.getProfile(player.uniqueId) ?: return
+        val senderProfile = BukkitManager.profileModule.getProfile(player.uniqueId) ?: return
 
         if (voided || removed) {
             if (senderProfile.root) {
                 player.closeInventory()
-                ModuleManager.grantModule.deleteGrantById(grant.id)
-                GrantsMenu(ModuleManager.grantModule.findAllByPlayer(target.id), target).openMenu(player)
+                SharedManager.grantModule.deleteGrantById(grant.id)
+                GrantsMenu(SharedManager.grantModule.findAllByPlayer(target.id), target).openMenu(player)
             }
         }
 

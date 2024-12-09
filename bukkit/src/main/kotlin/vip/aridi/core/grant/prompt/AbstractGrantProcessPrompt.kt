@@ -6,8 +6,8 @@ import org.bukkit.conversations.StringPrompt
 import org.bukkit.entity.Player
 import vip.aridi.core.profile.Profile
 import vip.aridi.core.rank.Rank
-import vip.aridi.core.util.Callback
-import vip.aridi.core.util.TimeUtil
+import vip.aridi.core.utils.Callback
+import vip.aridi.core.utils.TimeUtil
 import vip.aridi.core.utils.CC
 import vip.aridi.core.utils.menus.ConfirmMenu
 

@@ -7,7 +7,7 @@ import org.bukkit.Sound
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import vip.aridi.core.grant.menu.view.GrantsMenu
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.profile.Profile
 import vip.aridi.core.utils.CC
 
@@ -29,7 +29,7 @@ class GrantsCommand {
         profile: Profile
     ) {
         if (sender !is Player) return
-        val grants = ModuleManager.grantModule.findAllByPlayer(profile.id)
+        val grants = SharedManager.grantModule.findAllByPlayer(profile.id)
 
         if (grants.isEmpty()) {
             sender.sendMessage(CC.translate("${profile.name}&c has no grants."))

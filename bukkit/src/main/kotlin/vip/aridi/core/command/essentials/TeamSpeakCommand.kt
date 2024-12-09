@@ -3,7 +3,7 @@ package vip.aridi.core.command.essentials
 import com.jonahseguin.drink.annotation.Command
 import com.jonahseguin.drink.annotation.Sender
 import org.bukkit.command.CommandSender
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
 import vip.aridi.core.utils.CC
 
 /*
@@ -19,8 +19,8 @@ class TeamSpeakCommand {
 
     @Command(name = "", aliases = ["ts", "ts3"], desc = "")
     fun onCommand(@Sender sender: CommandSender) {
-        for (s in ModuleManager.configModule.messagesConfig.config.getStringList("MESSAGES.TEAMSPEAK")) {
-            sender.sendMessage(CC.translate(s.replace("{teamspeak}", ModuleManager.configModule.mainConfig.config.getString("LINKS.TEAMSPEAK"))))
+        for (s in BukkitManager.configModule.messagesConfig.config.getStringList("MESSAGES.TEAMSPEAK")) {
+            sender.sendMessage(CC.translate(s.replace("{teamspeak}", BukkitManager.configModule.mainConfig.config.getString("LINKS.TEAMSPEAK"))))
         }
     }
 }

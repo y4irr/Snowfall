@@ -7,7 +7,8 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.utils.CC
 
@@ -26,7 +27,8 @@ class ListCommand {
         desc = ""
     )
     fun listCommand(@Sender sender: CommandSender) {
-        sender.sendMessage(CC.translate(StringUtils.join(ModuleManager.rankModule.cache.values
+        sender.sendMessage(CC.translate(StringUtils.join(
+            SharedManager.rankModule.cache.values
             .filter { canSee(sender, it) }
             .sortedBy { it.priority }
             .reversed()
@@ -35,12 +37,12 @@ class ListCommand {
         val players = Bukkit.getServer().onlinePlayers
             .filter { if (sender is Player) return@filter sender.canSee(it) else return@filter true }
             .sortedBy {
-                val priority = ModuleManager.grantModule.findGrantedRank(it.uniqueId).priority
+                val priority = SharedManager.grantModule.findGrantedRank(it.uniqueId).priority
 
                 return@sortedBy priority
             }
             .reversed()
-            .map { formatName(it, ModuleManager.grantModule.findGrantedRank(it.uniqueId)) }
+            .map { formatName(it, SharedManager.grantModule.findGrantedRank(it.uniqueId)) }
 
         sender.sendMessage(
             CC.translate("&f(${players.size}/${Bukkit.getServer().maxPlayers}) [${StringUtils.join(players, "&f,")}&f]")

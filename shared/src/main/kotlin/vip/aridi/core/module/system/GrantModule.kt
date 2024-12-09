@@ -1,6 +1,5 @@
-package vip.aridi.core.module.impl.system
+package vip.aridi.core.module.system
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
@@ -10,10 +9,11 @@ import vip.aridi.core.grant.Grant
 import vip.aridi.core.grant.service.GrantExpiryService
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.star.StarGrantListener
 import vip.aridi.core.utils.gson.GrantDeserializer
+import vip.aridi.star.event.StarEvent
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import kotlin.collections.ArrayList
@@ -46,8 +46,8 @@ class GrantModule: IModule {
     override fun category(): ModuleCategory = ModuleCategory.SYSTEM
 
     override fun load() {
-        collection = ModuleManager.databaseModule.getCollection("grants")
-        ModuleManager.databaseModule.redisAPI.addListener(StarGrantListener())
+        collection = SharedManager.databaseModule.getCollection("grants")
+        SharedManager.databaseModule.redisAPI.addListener(StarGrantListener())
     }
 
     override fun unload() {
@@ -69,12 +69,17 @@ class GrantModule: IModule {
     fun grant(rank: Rank, target: UUID, sender: UUID, reason: String, duration: Long): Boolean {
         val grant = Grant(UUID.randomUUID(), rank.name, target, sender, duration, reason)
 
-        update(grant)
-        return true
+        val update = update(grant)
+
+        if (update) {
+            SharedManager.databaseModule.redisAPI.sendEvent(StarEvent(SharedManager.EXECUTE_GRANT, grant))
+        }
+
+        return update
     }
 
     fun findGrantedRank(uuid: UUID): Rank {
-        return grant[uuid] ?: ModuleManager.rankModule.defaultRank
+        return grant[uuid] ?: SharedManager.rankModule.defaultRank
     }
 
     fun remove(grant: Grant, remover: UUID, reason: String): Boolean {
@@ -82,7 +87,12 @@ class GrantModule: IModule {
         grant.removedAt = System.currentTimeMillis()
         grant.removedReason = reason
 
-        return update(grant)
+        val update = update(grant)
+
+        if (update) {
+            SharedManager.databaseModule.redisAPI.sendEvent(StarEvent(SharedManager.REMOVE_GRANT, grant))
+        }
+        return update
     }
 
     fun deleteGrantById(id: UUID): Boolean {
@@ -99,8 +109,9 @@ class GrantModule: IModule {
             gson.fromJson(it.toJson(), Grant::class.java)
         }.toSet()
     }
+
     fun setGrant(uuid: UUID, grants: Collection<Grant>) {
-        grant[uuid] = (grants.filter{!it.isVoided() && !it.isRemoved()}.mapNotNull {it.getRank()}.sortedBy{it.priority}.reversed().firstOrNull() ?: ModuleManager.rankModule.defaultRank)
+        grant[uuid] = (grants.filter{!it.isVoided() && !it.isRemoved()}.mapNotNull {it.getRank()}.sortedBy{ it.priority }.reversed().firstOrNull() ?: SharedManager.rankModule.defaultRank)
     }
 
     fun findGrantsBySender(sender: UUID): Set<Grant> {
@@ -114,7 +125,7 @@ class GrantModule: IModule {
     }
 
     fun update(value: Grant): Boolean {
-        return ModuleManager.databaseModule.getCollection("grants").updateOne(
+        return SharedManager.databaseModule.getCollection("grants").updateOne(
             Filters.eq("_id", value.id.toString()),
             Document("\$set", Document.parse(gson.toJson(value))),
             UpdateOptions().upsert(true)
@@ -122,13 +133,13 @@ class GrantModule: IModule {
     }
 
     fun delete(value: Grant): Boolean {
-        return ModuleManager.databaseModule.getCollection("grants").deleteOne(
+        return SharedManager.databaseModule.getCollection("grants").deleteOne(
             Filters.eq("_id", value.id.toString())
         ).wasAcknowledged()
     }
     fun findAllByPlayer(target: UUID): MutableSet<Grant> {
         return CompletableFuture.supplyAsync {
-            ModuleManager.databaseModule.getCollection("grants")
+            SharedManager.databaseModule.getCollection("grants")
                 .find(Filters.eq("targetId", target.toString()))
                 .map { gson.fromJson(it.toJson(), Grant::class.java) }
                 .toMutableSet()

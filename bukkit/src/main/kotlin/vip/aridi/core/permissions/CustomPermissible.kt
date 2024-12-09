@@ -7,7 +7,8 @@ import org.bukkit.permissions.Permission
 import org.bukkit.permissions.PermissionAttachment
 import org.bukkit.permissions.PermissionAttachmentInfo
 import vip.aridi.core.Snowfall
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
+import vip.aridi.core.module.SharedManager
 import java.util.concurrent.ConcurrentHashMap
 
 
@@ -65,10 +66,10 @@ class CustomPermissible(player: Player) : PermissibleBase(player) {
     private fun gatherPermissions(): ConcurrentHashMap<String, Boolean> {
         val allPermissions = ArrayList<String>()
 
-        allPermissions.addAll(ModuleManager.grantModule.active[uuid]?.flatMap { it.getRank()?.permission ?: emptySet() } ?: emptyList())
-        allPermissions.addAll(ModuleManager.profileModule.getProfile(uuid)?.permissions ?: emptyList())
+        allPermissions.addAll(SharedManager.grantModule.active[uuid]?.flatMap { it.getRank()?.permission ?: emptySet() } ?: emptyList())
+        allPermissions.addAll(BukkitManager.profileModule.getProfile(uuid)?.permissions ?: emptyList())
 
-        val calculated = ModuleManager.profileModule.calculatePermissions(allPermissions, true)
+        val calculated = BukkitManager.profileModule.calculatePermissions(allPermissions, true)
         calculated[Server.BROADCAST_CHANNEL_USERS] = true
 
         return ConcurrentHashMap(calculated)

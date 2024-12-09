@@ -1,4 +1,4 @@
-package vip.aridi.core.util
+package vip.aridi.core.utils
 
 /*
  * This project can't be redistributed without

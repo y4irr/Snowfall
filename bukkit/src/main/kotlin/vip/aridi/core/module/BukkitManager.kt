@@ -1,13 +1,11 @@
 package vip.aridi.core.module
 
-import vip.aridi.core.utils.CC
-import vip.aridi.core.Snowfall
-import org.bukkit.command.ConsoleCommandSender
 import vip.aridi.core.module.impl.core.CommandsModule
 import vip.aridi.core.module.impl.core.ConfigurationModule
-import vip.aridi.core.module.impl.core.DatabaseModule
+import vip.aridi.core.module.core.DatabaseModule
 import vip.aridi.core.module.impl.core.ProfileModule
 import vip.aridi.core.module.impl.system.*
+import java.util.logging.Logger
 
 /*
  * This project can't be redistributed without
@@ -18,17 +16,13 @@ import vip.aridi.core.module.impl.system.*
  * Date: 08 - nov
  */
 
-class ModuleManager(plugin: Snowfall):ModuleLifecycleManager {
-    private val modules: MutableList<IModule> = mutableListOf()
-    private val console: ConsoleCommandSender = plugin.server.consoleSender
+class BukkitManager: ModuleLifecycleManager {
+    private val logger = Logger.getLogger(SharedManager::class.java.name)
 
     companion object {
         @JvmStatic
         val configModule = ConfigurationModule()
-        val databaseModule = DatabaseModule()
         val profileModule = ProfileModule()
-        val rankModule = RankModule()
-        val grantModule = GrantModule()
         val permissionModule = PermissionModule()
         val punishmentModule = PunishmentModule()
     }
@@ -39,7 +33,7 @@ class ModuleManager(plugin: Snowfall):ModuleLifecycleManager {
 
     init {
         startup()
-        console.sendMessage(CC.translate("&7[&bSnowfall&7] &aModule startup task finished successfully"))
+        logger.info("[Bukkit Module] Module startup task finished successfully")
     }
 
     /**t
@@ -52,18 +46,27 @@ class ModuleManager(plugin: Snowfall):ModuleLifecycleManager {
      */
 
     override fun startup() {
-        console.sendMessage(CC.translate("&7[&bSnowfall&7] &aModule startup task has been initialized"))
+        logger.info("[Bukkit Module] Module startup task has been initialized")
         initModules()
         enabled()
     }
 
     private fun initModules() {
+        SharedManager.databaseModule = DatabaseModule(
+            configModule.databaseConfig.config.getString("MONGO.URI"),
+            configModule.databaseConfig.config.getString("MONGO.NAME"),
+            configModule.databaseConfig.config.getString("REDIS.IP"),
+            configModule.databaseConfig.config.getInt("REDIS.PORT"),
+            configModule.databaseConfig.config.getString("REDIS.CHANNEL"),
+            configModule.databaseConfig.config.getString("REDIS.PASSWORD")
+        )
+
         addModules(configModule)
-        addModules(databaseModule)
+        addModules(SharedManager.databaseModule)
         addModules(profileModule)
         addModules(listenerModule)
-        addModules(rankModule)
-        addModules(grantModule)
+        addModules(SharedManager.rankModule)
+        addModules(SharedManager.grantModule)
         addModules(permissionModule)
         addModules(managerModule)
         addModules(punishmentModule)
@@ -79,30 +82,30 @@ class ModuleManager(plugin: Snowfall):ModuleLifecycleManager {
     }
 
     override fun loadModules() {
-        modules.sortedWith(compareBy(
+        SharedManager.modules.sortedWith(compareBy(
             { it.category().order },
             { it.order() }
         )).forEach {
             it.load()
-            console.sendMessage(CC.translate("&7[&bModule System&7] &a${it.moduleName()} module has been enabled successfully"))
+            logger.info("[Module System] ${it.moduleName()} from bukkit loaded successfully")
         }
     }
 
 
     override fun unloadModules() {
-        modules.sortedByDescending {
+        SharedManager.modules.sortedByDescending {
             it.category().order
             it.order() }.forEach {
             it.unload()
-            console.sendMessage(CC.translate("&7[&bModule System&7] &c${it.moduleName()} module has been disabled successfully"))
+            logger.info("[Module System] ${it.moduleName()} module has been disabled successfully")
         }
     }
 
     override fun addModules(iModule: IModule) {
-        modules.add(iModule)
+        SharedManager.modules.add(iModule)
     }
 
     override fun reloadModule(moduleName: Int) {
-        modules.firstOrNull { it.order() == moduleName }?.reload()
+        SharedManager.modules.firstOrNull { it.order() == moduleName }?.reload()
     }
 }

@@ -8,7 +8,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import vip.aridi.core.Snowfall
 import vip.aridi.core.grant.prompt.GrantProcessPrompt
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.profile.Profile
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.utils.CC
@@ -59,12 +59,12 @@ class GrantButton(private val rank: Rank, private val target: Profile) : Button(
      * Checks if the rank can be granted, sending error messages if not.
      */
     private fun isRankGrantable(player: Player): Boolean {
-        if (rank == ModuleManager.rankModule.defaultRank) {
+        if (rank == SharedManager.rankModule.defaultRank) {
             player.sendMessage(CC.translate("&cThat rank can't be granted as it is the default rank."))
             return false
         }
 
-        if (ModuleManager.grantModule.findAllByPlayer(target.id).any { it.getRank()?.name == rank.name && !it.isRemoved() }) {
+        if (SharedManager.grantModule.findAllByPlayer(target.id).any { it.getRank()?.name == rank.name && !it.isRemoved() }) {
             player.sendMessage(CC.translate("&cGrant cannot be given as the player already possesses it."))
             return false
         }

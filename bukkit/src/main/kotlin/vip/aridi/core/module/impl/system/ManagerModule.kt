@@ -4,7 +4,8 @@ import vip.aridi.core.Snowfall
 import vip.aridi.core.grant.adapter.GrantBukkitAdapter
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
+import vip.aridi.core.module.SharedManager
 
 /*
  * This project can't be redistributed without
@@ -21,8 +22,8 @@ class ManagerModule: IModule {
     override fun category(): ModuleCategory = ModuleCategory.SYSTEM
 
     override fun load() {
-        ModuleManager.grantModule.setProvider(GrantBukkitAdapter())
-        Snowfall.get().server.scheduler.runTaskAsynchronously(Snowfall.get(), ModuleManager.grantModule.expiryService)
+        SharedManager.grantModule.setProvider(GrantBukkitAdapter())
+        Snowfall.get().server.scheduler.runTaskAsynchronously(Snowfall.get(), SharedManager.grantModule.expiryService)
     }
 
     override fun unload() {

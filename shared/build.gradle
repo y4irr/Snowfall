@@ -19,6 +19,8 @@ dependencies {
     implementation 'redis.clients:jedis:2.9.0'
     implementation 'com.google.code.gson:gson:2.9.0'
 
+    implementation 'vip.aridi:Star:1.0-SNAPSHOT'
+
     implementation fileTree(dir: '.lib', include: '*.jar')
 }
 

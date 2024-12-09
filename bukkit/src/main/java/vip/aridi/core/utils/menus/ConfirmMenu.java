@@ -1,6 +1,6 @@
 package vip.aridi.core.utils.menus;
 
-import vip.aridi.core.util.Callback;
+import vip.aridi.core.utils.Callback;
 import vip.aridi.core.utils.menus.button.Button;
 import vip.aridi.core.utils.menus.button.impl.BooleanButton;
 import org.bukkit.Material;

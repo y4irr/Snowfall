@@ -1,9 +1,8 @@
 package vip.aridi.core.star
 
 import com.google.gson.JsonObject
-import vip.aridi.core.Snowfall
 import vip.aridi.core.grant.Grant
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.star.listener.StarListener
 import vip.aridi.star.stellar.StellarEvent
 import java.util.*
@@ -20,11 +19,11 @@ import kotlin.collections.ArrayList
 
 class StarGrantListener : StarListener {
 
-    @StellarEvent(Snowfall.EXECUTE_GRANT)
+    @StellarEvent(SharedManager.EXECUTE_GRANT)
     fun onGrantExecution(data: JsonObject) {
         val uuid = UUID.fromString(data["targetId"].asString)
-        val grantModule = ModuleManager.grantModule
-        val rankModule = ModuleManager.rankModule
+        val grantModule = SharedManager.grantModule
+        val rankModule = SharedManager.rankModule
 
         if (!grantModule.active.containsKey(uuid)) return
 
@@ -47,10 +46,10 @@ class StarGrantListener : StarListener {
         grantModule.findProvider().ifPresent { it.onGrantChange(uuid, grant) }
     }
 
-    @StellarEvent(Snowfall.REMOVE_GRANT)
+    @StellarEvent(SharedManager.REMOVE_GRANT)
     fun onGrantRemove(data: JsonObject) {
         val uuid = UUID.fromString(data["targetId"].asString)
-        val grantModule = ModuleManager.grantModule
+        val grantModule = SharedManager.grantModule
 
         if (!grantModule.active.containsKey(uuid)) return
 

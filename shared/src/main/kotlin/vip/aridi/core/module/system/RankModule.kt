@@ -1,4 +1,4 @@
-package vip.aridi.core.module.impl.system
+package vip.aridi.core.module.system
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
@@ -7,7 +7,7 @@ import com.mongodb.client.model.UpdateOptions
 import org.bson.Document
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.star.StarRankListener
 import vip.aridi.core.utils.gson.RankDeserializer
@@ -31,7 +31,7 @@ class RankModule: IModule {
 
     fun getAllRanks(): MutableSet<Rank> {
         val rankSet = mutableSetOf<Rank>()
-        ModuleManager.databaseModule.getCollection("ranks").find().forEach { document ->
+        SharedManager.databaseModule.getCollection("ranks").find().forEach { document ->
             val rank = gson.fromJson(document.toJson(), Rank::class.java)
             rankSet.add(rank)
         }
@@ -39,7 +39,7 @@ class RankModule: IModule {
     }
 
     fun getRankById(id: String): Rank? {
-        val document = ModuleManager.databaseModule.getCollection("ranks").find(Document("_id", id)).firstOrNull() ?: return null
+        val document = SharedManager.databaseModule.getCollection("ranks").find(Document("_id", id)).firstOrNull() ?: return null
         return gson.fromJson(document.toJson(), Rank::class.java)
     }
 
@@ -47,7 +47,7 @@ class RankModule: IModule {
         return cache[id]
     }
     fun updateRank(rank: Rank): Boolean {
-        val updateResult = ModuleManager.databaseModule.getCollection("ranks").updateOne(
+        val updateResult = SharedManager.databaseModule.getCollection("ranks").updateOne(
             Filters.eq("_id", rank.name),
             Document("\$set", Document.parse(gson.toJson(rank))),
             UpdateOptions().upsert(true))
@@ -65,7 +65,7 @@ class RankModule: IModule {
     override fun load() {
         cache.putAll(loadRanks())
         defaultRank = loadDefaultRank()
-        ModuleManager.databaseModule.redisAPI.addListener(StarRankListener())
+        SharedManager.databaseModule.redisAPI.addListener(StarRankListener())
     }
 
     override fun unload() {
@@ -81,7 +81,7 @@ class RankModule: IModule {
 
 
     private fun loadRanks(): Map<String, Rank> {
-        return ModuleManager.databaseModule.getCollection("ranks").find()
+        return SharedManager.databaseModule.getCollection("ranks").find()
             .map { gson.fromJson(it.toJson(), Rank::class.java) }
             .associateBy { it.name }
             .toMutableMap()
@@ -108,7 +108,7 @@ class RankModule: IModule {
 
     fun findAllRanks(): MutableSet<Rank> {
         return CompletableFuture.supplyAsync {
-            val cursor = ModuleManager.databaseModule.getCollection("ranks").find()
+            val cursor = SharedManager.databaseModule.getCollection("ranks").find()
             val rankSet = mutableSetOf<Rank>()
             cursor.forEach {
                 try {
@@ -123,7 +123,7 @@ class RankModule: IModule {
     }
 
     fun deleteRank(id: String): Boolean {
-        val deleteResult = ModuleManager.databaseModule.getCollection("ranks").deleteOne(Filters.eq("_id", id))
+        val deleteResult = SharedManager.databaseModule.getCollection("ranks").deleteOne(Filters.eq("_id", id))
         if (deleteResult.wasAcknowledged()) {
             cache.remove(id)
         }

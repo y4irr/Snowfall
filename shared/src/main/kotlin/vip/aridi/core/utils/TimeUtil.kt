@@ -1,4 +1,4 @@
-package vip.aridi.core.util
+package vip.aridi.core.utils
 
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat

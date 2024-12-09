@@ -8,7 +8,7 @@ import org.bukkit.permissions.Permissible
 import vip.aridi.core.Snowfall
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
 import vip.aridi.core.permissions.CustomPermissible
 import vip.aridi.core.permissions.PermissionUpdateEvent
 import vip.aridi.core.permissions.listener.PermissionListener
@@ -32,7 +32,7 @@ class PermissionModule: IModule {
 
     override fun load() {
         PermissionListener(Snowfall.get())
-        ModuleManager.databaseModule.redisAPI.addListener(StarPermissionListener())
+        BukkitManager.databaseModule.redisAPI.addListener(StarPermissionListener())
     }
 
     override fun unload() {
@@ -57,10 +57,13 @@ class PermissionModule: IModule {
         val permissible = getPermissible(player) as? CustomPermissible ?: return false
 
         runAsync {
-            permissible.calculatePermissions(clear)
             runSync {
                 server.pluginManager.callEvent(PermissionUpdateEvent(player))
+                println("Event called")
             }
+
+            println("Calculating Permissions, clear: $clear")
+            permissible.calculatePermissions(clear)
         }
 
         return true
@@ -69,7 +72,7 @@ class PermissionModule: IModule {
     fun update(profile: Profile, permission: String, remove: Boolean): Boolean {
         checkThread()
 
-        val updateSuccess = profile.flagsForSave()
+        val updateSuccess = BukkitManager.profileModule.toSave(profile)
 
         if (updateSuccess) {
             val jsonObject = JsonObject().apply {

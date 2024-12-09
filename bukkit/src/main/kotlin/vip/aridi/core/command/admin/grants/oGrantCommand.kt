@@ -4,13 +4,12 @@ import com.jonahseguin.drink.annotation.Command
 import com.jonahseguin.drink.annotation.Sender
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.module.impl.core.ProfileModule
 import vip.aridi.core.profile.Profile
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.utils.CC
 import vip.aridi.core.utils.Duration
-import java.util.UUID
 
 /*
  * This project can't be redistributed without
@@ -35,7 +34,7 @@ class oGrantCommand {
             sender.sendMessage(CC.translate("&cThis command cannot be executed by users! Console Only!"))
             return
         }
-        ModuleManager.grantModule.grant(rank, target.id, ProfileModule.CONSOLE_ID, reason, duration.get())
+        SharedManager.grantModule.grant(rank, target.id, ProfileModule.CONSOLE_ID, reason, duration.get())
 
     }
 }

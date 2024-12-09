@@ -4,7 +4,8 @@ import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.rank.menus.RankEditor
 import vip.aridi.core.utils.CC
@@ -48,7 +49,7 @@ class ColorButton(
     override fun clicked(player: Player, slot: Int, clickType: ClickType) {
         player.closeInventory()
         rank.color = color.name
-        ModuleManager.rankModule.updateRank(rank)
+        SharedManager.rankModule.updateRank(rank)
 
         RankEditor(rank).openMenu(player)
     }

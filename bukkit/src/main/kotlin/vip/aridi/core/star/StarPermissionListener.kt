@@ -2,7 +2,8 @@ package vip.aridi.core.star
 
 import com.google.gson.JsonObject
 import vip.aridi.core.Snowfall
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.permissions.CustomPermissible
 import vip.aridi.core.profile.Profile
 import vip.aridi.star.listener.StarListener
@@ -20,7 +21,7 @@ import java.util.*
 
 class StarPermissionListener: StarListener {
 
-    @StellarEvent(Snowfall.UPDATE_PERMISSION)
+    @StellarEvent(SharedManager.UPDATE_PERMISSION)
     fun updatePermissible(data: JsonObject) {
         val profile = extractProfile(data) ?: return
 
@@ -30,14 +31,14 @@ class StarPermissionListener: StarListener {
         updateProfilePermissions(profile, permissions, remove)
 
         val player = Snowfall.get().server.getPlayer(profile.id) ?: return
-        val permissible = ModuleManager.permissionModule.getPermissible(player) as? CustomPermissible ?: return
+        val permissible = BukkitManager.permissionModule.getPermissible(player) as? CustomPermissible ?: return
 
         updatePlayerPermissions(permissible, permissions, remove)
     }
 
     private fun extractProfile(data: JsonObject): Profile? {
         val profileId = data.get("_id")?.asString ?: return null
-        return ModuleManager.profileModule.getProfile(UUID.fromString(profileId))
+        return BukkitManager.profileModule.getProfile(UUID.fromString(profileId))
     }
 
     private fun updateProfilePermissions(profile: Profile, permissions: String, remove: Boolean) {

@@ -5,7 +5,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.permissions.PermissibleBase
 import org.bukkit.plugin.java.JavaPlugin
 import vip.aridi.core.listener.oListener
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
 import vip.aridi.core.permissions.CustomPermissible
 
 /*
@@ -20,11 +20,11 @@ import vip.aridi.core.permissions.CustomPermissible
 class PermissionListener(plugin: JavaPlugin) : oListener(plugin) {
     override fun registerEvents() {
         lowestPriority<PlayerLoginEvent> { e ->
-            ModuleManager.permissionModule.setPermissible(e.player, CustomPermissible(e.player))
+            BukkitManager.permissionModule.setPermissible(e.player, CustomPermissible(e.player))
         }
 
         monitorPriority<PlayerQuitEvent> { e ->
-            ModuleManager.permissionModule.setPermissible(e.player, PermissibleBase(e.player))
+            BukkitManager.permissionModule.setPermissible(e.player, PermissibleBase(e.player))
         }
     }
 }

@@ -1,6 +1,6 @@
 package vip.aridi.core.grant.adapter
 
-import vip.aridi.core.module.impl.system.GrantModule
+import vip.aridi.core.module.system.GrantModule
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import vip.aridi.core.Snowfall
@@ -8,7 +8,7 @@ import vip.aridi.core.grant.Grant
 import vip.aridi.core.grant.event.GrantApplyEvent
 import vip.aridi.core.grant.event.GrantExpireEvent
 import vip.aridi.core.grant.event.GrantRemoveEvent
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
 import java.util.*
 
 /*
@@ -27,8 +27,11 @@ class GrantBukkitAdapter : GrantModule.GrantAdapter {
 
     override fun onGrantApply(uuid: UUID, grant: Grant) {
         getPlayer(uuid)?.let { player ->
-            ModuleManager.permissionModule.update(player, true)
-            runEvent { server.pluginManager.callEvent(GrantApplyEvent(player, grant)) }
+            BukkitManager.permissionModule.update(player, true)
+            runEvent {
+                println("Grant applied")
+                server.pluginManager.callEvent(GrantApplyEvent(player, grant))
+            }
         }
     }
 
@@ -41,14 +44,14 @@ class GrantBukkitAdapter : GrantModule.GrantAdapter {
             grant.getRank()?.takeIf { it.hidden }?.let { rank ->
                 player.sendMessage("${ChatColor.LIGHT_PURPLE}Your ${rank.displayName}${ChatColor.LIGHT_PURPLE} rank has expired.")
             }
-            ModuleManager.permissionModule.update(player, true)
+            BukkitManager.permissionModule.update(player, true)
             runEvent { server.pluginManager.callEvent(GrantExpireEvent(player, grant)) }
         }
     }
 
     override fun onGrantRemove(uuid: UUID, grant: Grant) {
         getPlayer(uuid)?.let { player ->
-            ModuleManager.permissionModule.update(player, true)
+            BukkitManager.permissionModule.update(player, true)
             runEvent { server.pluginManager.callEvent(GrantRemoveEvent(player, grant)) }
         }
     }

@@ -30,7 +30,8 @@ class GrantCommand {
     )
     fun grants(
         @Sender sender: CommandSender,
-        profile: Profile) {
+        profile: Profile
+    ) {
         if (sender !is Player) {
             sender.sendMessage(CC.translate("&cYou must be a player to perform that command"))
             return

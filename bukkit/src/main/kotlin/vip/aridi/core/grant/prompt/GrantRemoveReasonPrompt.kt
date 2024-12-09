@@ -8,8 +8,7 @@ import org.bukkit.entity.Player
 import vip.aridi.core.Snowfall
 import vip.aridi.core.grant.Grant
 import vip.aridi.core.grant.menu.view.GrantsMenu
-import vip.aridi.core.grant.service.GrantExpiryService
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.profile.Profile
 import vip.aridi.core.utils.CC
 
@@ -38,10 +37,10 @@ class GrantRemoveReasonPrompt(
         }
 
         Bukkit.getServer().scheduler.runTaskAsynchronously(Snowfall.get()) {
-            if (ModuleManager.grantModule.remove(grant, (context.forWhom as Player).uniqueId, input)) {
+            if (SharedManager.grantModule.remove(grant, (context.forWhom as Player).uniqueId, input)) {
                 context.forWhom.sendRawMessage(CC.translate("&aRemove grant successfully"))
 
-                val allGrants: Set<Grant> = ModuleManager.grantModule.findAllByPlayer(target.id)
+                val allGrants: Set<Grant> = SharedManager.grantModule.findAllByPlayer(target.id)
                 GrantsMenu(allGrants, target).openMenu(sender)
 
                 return@runTaskAsynchronously

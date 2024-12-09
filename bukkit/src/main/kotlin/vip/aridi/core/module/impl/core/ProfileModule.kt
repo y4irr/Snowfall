@@ -9,7 +9,9 @@ import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import vip.aridi.core.module.ModuleCategory
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
+import vip.aridi.core.module.SharedManager
+import vip.aridi.core.utils.MongoUtil
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -81,17 +83,17 @@ class ProfileModule : IModule {
     }
 
     fun getProfiles(): List<Profile> {
-        return ModuleManager.databaseModule.getCollection("profiles").find().mapNotNull {
+        return BukkitManager.databaseModule.getCollection("profiles").find().mapNotNull {
             fromDocument(it)
         }.toList()
     }
 
     fun loadProfile(name: String): Profile? {
-        val document = ModuleManager.databaseModule.getCollection("profiles").find(Filters.eq("name", name)).first()
+        val document = BukkitManager.databaseModule.getCollection("profiles").find(Filters.eq("name", name)).first()
 
         if (document == null) {
             val profile = Profile(Bukkit.getOfflinePlayer(name).uniqueId, name)
-            profile.flagsForSave()
+            toSave(profile)
             return profile
         }
 
@@ -99,11 +101,11 @@ class ProfileModule : IModule {
     }
 
     fun loadProfile(id: UUID): Profile? {
-        val document = ModuleManager.databaseModule.getCollection("profiles").find(Filters.eq("_id", id.toString())).first()
+        val document = BukkitManager.databaseModule.getCollection("profiles").find(Filters.eq("_id", id.toString())).first()
 
         if (document == null) {
             val profile = Profile(id, Bukkit.getOfflinePlayer(id).name ?: "Unknown")
-            profile.flagsForSave()
+            toSave(profile)
             return profile
         }
 
@@ -124,7 +126,7 @@ class ProfileModule : IModule {
         val toReturn = ConcurrentHashMap<String,Boolean>()
 
         if (defaultPermissions) {
-            toReturn.putAll(ModuleManager.rankModule.defaultRank.permission.associate{
+            toReturn.putAll(SharedManager.rankModule.defaultRank.permission.associate{
                 val value = !it.startsWith("-")
                 return@associate (if (value) it else it.substring(1)).toLowerCase() to value
             })
@@ -152,6 +154,23 @@ class ProfileModule : IModule {
         } catch (e: Exception) {
             null
         }
+    }
+
+    fun toSave(profile: Profile): Boolean {
+        BukkitManager.profileModule.updateProfile(profile)
+
+        val profileDocument = Document()
+        profileDocument["_id"] = profile.id.toString()
+        profileDocument["name"] = profile.name
+        profileDocument["frozen"] = profile.frozen
+        profileDocument["coins"] = profile.coins
+
+        val result = BukkitManager.databaseModule.getCollection("profiles").replaceOne(
+            Filters.eq("_id", profile.id.toString()),
+            profileDocument,
+            MongoUtil.REPLACE_OPTIONS
+        )
+        return result.wasAcknowledged()
     }
 
     companion object {

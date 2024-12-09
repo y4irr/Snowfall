@@ -3,10 +3,9 @@ package vip.aridi.core.grant.menu.view
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import vip.aridi.core.grant.Grant
-import vip.aridi.core.module.ModuleManager
-import vip.aridi.core.module.impl.system.RankModule
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.profile.Profile
-import vip.aridi.core.util.TimeUtil
+import vip.aridi.core.utils.TimeUtil
 import vip.aridi.core.utils.CC
 import vip.aridi.core.utils.UnicodeUtil
 import vip.aridi.core.utils.menus.PaginatedMenu
@@ -29,7 +28,7 @@ class GrantsMenu(
 ) : PaginatedMenu() {
 
     override fun getPrePaginatedTitle(player: Player?): String {
-        val rank = ModuleManager.grantModule.findGrantedRank(profile.id)
+        val rank = SharedManager.grantModule.findGrantedRank(profile.id)
         return CC.translate("${ChatColor.valueOf(rank.color)}${profile.name}&7's grants")
     }
 
@@ -47,7 +46,7 @@ class GrantsMenu(
                 this[getSlot(i, 4)] = GlassButton(7)
             }
 
-            val rank = ModuleManager.grantModule.findGrantedRank(profile.id)
+            val rank = SharedManager.grantModule.findGrantedRank(profile.id)
             val currentGrant = grants.maxByOrNull { it.getRank()?.priority ?: 0 } ?: return@apply
             this[4] = createProfileButton(rank.color, rank.displayName, currentGrant)
         }

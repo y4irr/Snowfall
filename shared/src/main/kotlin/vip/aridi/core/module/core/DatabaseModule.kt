@@ -1,4 +1,4 @@
-package vip.aridi.core.module.impl.core
+package vip.aridi.core.module.core
 
 import com.google.gson.Gson
 import com.mongodb.client.MongoClient
@@ -8,7 +8,6 @@ import org.bson.Document
 import redis.clients.jedis.JedisPool
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
-import vip.aridi.core.utils.CC
 import vip.aridi.star.RedisStarAPI
 import vip.aridi.star.StarAPI
 
@@ -21,7 +20,14 @@ import vip.aridi.star.StarAPI
  * Date: 23 - nov
  */
 
-class DatabaseModule : IModule {
+class DatabaseModule(
+    val mongoUri: String,
+    val mongoDbName: String,
+    val redisIp: String,
+    val redisPort: Int,
+    val redisChannel: String,
+    val redisPassword: String
+) : IModule {
 
     private lateinit var client: MongoClient
     lateinit var database: com.mongodb.client.MongoDatabase
@@ -33,26 +39,19 @@ class DatabaseModule : IModule {
 
     override fun load() {
         try {
-            val configModule = ConfigurationModule()
-            val uri = configModule.databaseConfig.config.getString("MONGO.URI")
-                ?: throw IllegalStateException("DATABASE.URI not found in configuration")
-            val dbName = configModule.databaseConfig.config.getString("MONGO.NAME")
-                ?: throw IllegalStateException("DATABASE.NAME not found in configuration")
-
-            client = MongoClients.create(uri)
-            database = client.getDatabase(dbName)
+            client = MongoClients.create(mongoUri)
+            database = client.getDatabase(mongoDbName)
             jedisPool = JedisPool(
-                configModule.databaseConfig.config.getString("REDIS.IP"),
-                configModule.databaseConfig.config.getInt("REDIS.PORT")
+                redisIp,
+                redisPort
             )
             redisAPI = RedisStarAPI(
                 Gson(),
                 jedisPool,
-                configModule.databaseConfig.config.getString("REDIS.CHANNEL"),
-                configModule.databaseConfig.config.getString("REDIS.PASSWORD")
+                redisChannel,
+                redisPassword
             )
 
-            println(CC.translate("&7[&bDatabase System&7] &aSuccessfully connected to database: $dbName"))
         } catch (e: Exception) {
             throw IllegalStateException("Failed to initialize DatabaseModule: ${e.message}")
         }
@@ -61,9 +60,7 @@ class DatabaseModule : IModule {
     override fun unload() {
         try {
             client.close()
-            println(CC.translate("&7[&bDatabase System&7] &cDatabase connection closed"))
         } catch (e: Exception) {
-            println(CC.translate("&7[&bDatabase System&7] &cFailed to close database connection: ${e.message}"))
         }
     }
 

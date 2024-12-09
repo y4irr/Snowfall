@@ -8,7 +8,8 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.ItemStack
 import vip.aridi.core.Snowfall
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.rank.menus.RankEditor
 import vip.aridi.core.rank.prompt.RankModifyPrompt
@@ -248,6 +249,6 @@ class RankMetadata(
     }
 
     private fun saveRank() {
-        ModuleManager.rankModule.updateRank(rank)
+        SharedManager.rankModule.updateRank(rank)
     }
 }

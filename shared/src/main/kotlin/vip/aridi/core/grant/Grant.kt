@@ -1,7 +1,7 @@
 package vip.aridi.core.grant
 
 import com.google.gson.annotations.SerializedName
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.rank.Rank
 import java.util.UUID
 
@@ -39,7 +39,7 @@ class Grant(
 
     fun isPermanent(): Boolean = duration == 0L
 
-    fun getRank(): Rank? = ModuleManager.rankModule.findById(rankId)
+    fun getRank(): Rank? = SharedManager.rankModule.findById(rankId)
 
     fun getRankPriority(): Int = getRank()?.priority ?: 0
 

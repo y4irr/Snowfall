@@ -3,13 +3,8 @@ package vip.aridi.core.provider
 import com.jonahseguin.drink.argument.CommandArg
 import com.jonahseguin.drink.exception.CommandExitMessage
 import com.jonahseguin.drink.parametric.DrinkProvider
-import org.bukkit.entity.Player
-import org.bukkit.plugin.Plugin
-import org.bukkit.plugin.java.JavaPlugin
-import vip.aridi.core.module.ModuleManager
-import vip.aridi.core.module.impl.core.ProfileModule
+import vip.aridi.core.module.BukkitManager
 import vip.aridi.core.profile.Profile
-import java.util.UUID
 
 /*
  * This project can't be redistributed without
@@ -22,7 +17,7 @@ import java.util.UUID
 
 class ProfileProvider : DrinkProvider<Profile>() {
 
-    private val profileModule = ModuleManager.profileModule
+    private val profileModule = BukkitManager.profileModule
 
     override fun doesConsumeArgument(): Boolean = true
 

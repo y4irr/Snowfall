@@ -1,7 +1,8 @@
 package vip.aridi.core.grant.menu.apply
 
 import org.bukkit.entity.Player
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.profile.Profile
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.utils.CC
@@ -56,11 +57,11 @@ class GrantMenu(
     private fun getAvailableRanks(player: Player?): List<Rank> {
         if (player == null) return emptyList()
 
-        val playerProfile = ModuleManager.profileModule.getProfile(player.uniqueId) ?: return emptyList()
-        val grantedRank = ModuleManager.grantModule.findGrantedRank(player.uniqueId)
+        val playerProfile = BukkitManager.profileModule.getProfile(player.uniqueId) ?: return emptyList()
+        val grantedRank = SharedManager.grantModule.findGrantedRank(player.uniqueId) ?: return emptyList()
 
-        return ModuleManager.rankModule.findAllRanks().filter { rank ->
-            rank.isEligibleForGrant(playerProfile, grantedRank.priority)
+        return SharedManager.rankModule.findAllRanks().filter { rank ->
+            rank.isEligibleForGrant(grantedRank.priority, playerProfile)
         }.sortedByDescending { it.priority }
     }
 
@@ -80,9 +81,9 @@ class GrantMenu(
 /**
  * Extension function to determine if a rank is eligible for granting.
  */
-private fun Rank.isEligibleForGrant(profile: Profile, grantedRankPriority: Int): Boolean {
+private fun Rank.isEligibleForGrant(grantedRankPriority: Int, profile: Profile): Boolean {
     return when {
-        profile.root -> grantedRankPriority >= this.priority
-        else -> !this.defaultRank && !this.hidden && grantedRankPriority >= this.priority
+        profile.root -> this.priority <= grantedRankPriority
+        else -> this.priority <= grantedRankPriority && !this.defaultRank && !this.hidden
     }
 }

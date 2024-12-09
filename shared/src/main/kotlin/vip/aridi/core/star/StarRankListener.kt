@@ -1,8 +1,7 @@
 package vip.aridi.core.star
 
 import com.google.gson.JsonObject
-import vip.aridi.core.Snowfall
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.rank.Rank
 import vip.aridi.star.listener.StarListener
 import vip.aridi.star.stellar.StellarEvent
@@ -18,23 +17,23 @@ import vip.aridi.star.stellar.StellarEvent
 
 class StarRankListener : StarListener {
 
-    @StellarEvent(Snowfall.CREATE_RANK)
+    @StellarEvent(SharedManager.CREATE_RANK)
     fun onRankCreation(data: JsonObject) {
         updateRank(data, createIfAbsent = true)
     }
 
-    @StellarEvent(Snowfall.DELETE_RANK)
+    @StellarEvent(SharedManager.DELETE_RANK)
     fun onRankDeletion(data: JsonObject) {
-        ModuleManager.rankModule.cache.remove(data["_id"].asString)
+        SharedManager.rankModule.cache.remove(data["_id"].asString)
     }
 
-    @StellarEvent(Snowfall.UPDATE_RANK)
+    @StellarEvent(SharedManager.UPDATE_RANK)
     fun onRankUpdate(data: JsonObject) {
         updateRank(data, createIfAbsent = false)
     }
 
     private fun updateRank(data: JsonObject, createIfAbsent: Boolean) {
-        val rankModule = ModuleManager.rankModule
+        val rankModule = SharedManager.rankModule
         val rankId = data["_id"].asString
         val existingRank = rankModule.findById(rankId)
 

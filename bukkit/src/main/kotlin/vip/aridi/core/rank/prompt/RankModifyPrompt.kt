@@ -4,7 +4,8 @@ import org.bukkit.conversations.ConversationContext
 import org.bukkit.conversations.Prompt
 import org.bukkit.conversations.StringPrompt
 import org.bukkit.entity.Player
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.rank.menus.RankEditor
 import vip.aridi.core.rank.menus.editor.RankMetadata
@@ -73,7 +74,7 @@ class RankModifyPrompt(
         } else {
             permissionsList.add(input)
             field.set(rank, permissionsList)
-            ModuleManager.rankModule.updateRank(rank)
+            SharedManager.rankModule.updateRank(rank)
         }
     }
 
@@ -85,22 +86,22 @@ class RankModifyPrompt(
         }
 
         field.set(rank, priceValue)
-        ModuleManager.rankModule.updateRank(rank)
+        SharedManager.rankModule.updateRank(rank)
     }
 
     private fun handlePrefix(input: String) {
         rank.prefix = input
-        ModuleManager.rankModule.updateRank(rank)
+        SharedManager.rankModule.updateRank(rank)
     }
 
     private fun handleDisplay(input: String) {
         rank.displayName = input
-        ModuleManager.rankModule.updateRank(rank)
+        SharedManager.rankModule.updateRank(rank)
     }
 
     private fun handleGenericField(input: String, field: Field) {
         field.set(rank, input)
-        ModuleManager.rankModule.updateRank(rank)
+        SharedManager.rankModule.updateRank(rank)
     }
 
     private fun navigateToMenu() {

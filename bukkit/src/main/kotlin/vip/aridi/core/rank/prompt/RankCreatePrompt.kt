@@ -4,7 +4,8 @@ import org.bukkit.conversations.ConversationContext
 import org.bukkit.conversations.Prompt
 import org.bukkit.conversations.StringPrompt
 import org.bukkit.entity.Player
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.rank.menus.RankMenu
 import vip.aridi.core.utils.CC
@@ -32,7 +33,7 @@ class RankCreatePrompt(
         }
 
         try {
-            val existingRank = ModuleManager.rankModule.findById(input)
+            val existingRank = SharedManager.rankModule.findById(input)
             if (existingRank != null) {
                 context.forWhom.sendRawMessage(CC.translate("&cThere's an existing rank with that name"))
             } else {
@@ -58,7 +59,7 @@ class RankCreatePrompt(
             createdAt = System.currentTimeMillis()
         }
 
-        ModuleManager.rankModule.updateRank(rank)
+        SharedManager.rankModule.updateRank(rank)
         //Redis packet here.
     }
 }

@@ -1,6 +1,6 @@
 package vip.aridi.core.profile.listener
 
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.BukkitManager
 import vip.aridi.core.Snowfall
 import org.bukkit.ChatColor
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent
@@ -24,14 +24,14 @@ class ProfileListener(plugin: JavaPlugin) : oListener(plugin) {
     override fun registerEvents() {
         highPriority<AsyncPlayerPreLoginEvent> { event ->
             try {
-                val profile = ModuleManager.profileModule.loadProfile(event.name)
+                val profile = BukkitManager.profileModule.loadProfile(event.name)
 
                 if (profile == null) {
                     event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "${ChatColor.RED}Your profile hasn't loaded, please re-join or contact an administrator.")
                     return@highPriority
                 }
 
-                ModuleManager.profileModule.updateProfile(profile)
+                BukkitManager.profileModule.updateProfile(profile)
                 Snowfall.get().logger.info("Loaded the ${profile.name}'s profile successfully!")
             } catch (ex: Exception) {
                 ex.printStackTrace()
@@ -41,7 +41,7 @@ class ProfileListener(plugin: JavaPlugin) : oListener(plugin) {
         highPriority<PlayerJoinEvent> { event ->
             val player = event.player
 
-            val profile = ModuleManager.profileModule.getProfile(player.uniqueId)
+            val profile = BukkitManager.profileModule.getProfile(player.uniqueId)
 
             if (profile == null) {
                 player.kickPlayer("${ChatColor.RED}Your profile hasn't loaded, please re-join or contact an administrator.")
@@ -53,7 +53,7 @@ class ProfileListener(plugin: JavaPlugin) : oListener(plugin) {
             val player = event.player
 
             try {
-                ModuleManager.profileModule.deleteProfile(player.uniqueId)?.flagsForSave()
+                BukkitManager.profileModule.deleteProfile(player.uniqueId).let { BukkitManager.profileModule.toSave(it!!) }
 
                 Snowfall.get().logger.info("Saved the ${player.name}'s profile successfully!")
             } catch (ex: Exception) {

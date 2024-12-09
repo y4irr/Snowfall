@@ -8,10 +8,10 @@ import org.bukkit.conversations.NullConversationPrefix
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import vip.aridi.core.Snowfall
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.rank.prompt.RankCreatePrompt
-import vip.aridi.core.util.Callback
+import vip.aridi.core.utils.Callback
 import vip.aridi.core.utils.CC
 import vip.aridi.core.utils.TextSplitter
 import vip.aridi.core.utils.TextureUtil
@@ -87,7 +87,7 @@ class RankMenu: PaginatedMenu() {
 
         description.add("")
         description.add("&d${UnicodeUtil.VERTICAL_LINE} &fColor&7: ${ChatColor.valueOf(rank.color)}${CC.convert(rank.color)}")
-        if (rank.name != ModuleManager.rankModule.defaultRank.name) {
+        if (rank.name != SharedManager.rankModule.defaultRank.name) {
             description.add("&d${UnicodeUtil.VERTICAL_LINE} &fPrefix&7: &d${rank.prefix}")
         }
         description.add(" &d${UnicodeUtil.VERTICAL_LINE} &fWeight&7: &d${rank.priority}")
@@ -100,7 +100,7 @@ class RankMenu: PaginatedMenu() {
 
     private fun handleRankClick(player: Player, rank: Rank, clickType: ClickType) {
         if (clickType.isRightClick) {
-            if (rank.name == ModuleManager.rankModule.defaultRank.name) {
+            if (rank.name == SharedManager.rankModule.defaultRank.name) {
                 player.sendMessage(CC.translate("&cRank '${rank.name}' is not deletable."))
                 playFail(player)
                 return
@@ -165,8 +165,8 @@ class RankMenu: PaginatedMenu() {
                 override fun callback(callback: Boolean) {
                     if (callback) {
                         player.sendMessage(CC.translate("&aRank '${rank.displayName}&a' is now successfully deleted."))
-                        ModuleManager.rankModule.deleteRank(rank.name)
-                        ModuleManager.rankModule.cache.remove(rank.name)
+                        SharedManager.rankModule.deleteRank(rank.name)
+                        SharedManager.rankModule.cache.remove(rank.name)
                     }
 
                     player.closeInventory()
@@ -177,7 +177,7 @@ class RankMenu: PaginatedMenu() {
     }
 
     private fun getAllowedRanks(): List<Rank> {
-        val allRanks = ModuleManager.rankModule.findAllRanks()
+        val allRanks = SharedManager.rankModule.findAllRanks()
         val ranks: MutableList<Rank> = Lists.newArrayList()
         ranks.addAll(allRanks)
         ranks.sortWith { o1, o2 -> o2.priority - o1.priority }

@@ -3,10 +3,10 @@ package vip.aridi.core.grant.prompt
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import vip.aridi.core.Snowfall
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.profile.Profile
 import vip.aridi.core.rank.Rank
-import vip.aridi.core.util.TimeUtil
+import vip.aridi.core.utils.TimeUtil
 import vip.aridi.core.utils.CC
 
 /*
@@ -38,9 +38,9 @@ class GrantProcessPrompt(
 
     override fun onGrantConfirmed(duration: Long) {
         Snowfall.get().server.scheduler.runTaskAsynchronously(Snowfall.get()) {
-            ModuleManager.grantModule.grant(rank, profile.id, sender.uniqueId, reason, duration)
+            SharedManager.grantModule.grant(rank, profile.id, sender.uniqueId, reason, duration)
 
-            val grantedRank = ModuleManager.grantModule.findGrantedRank(profile.id)
+            val grantedRank = SharedManager.grantModule.findGrantedRank(profile.id)
             val durationText = if (duration == 0L) "permanently" else "for ${TimeUtil.formatIntoDetailedString(duration)}"
 
             sender.sendMessage(

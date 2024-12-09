@@ -1,4 +1,4 @@
-package vip.aridi.core.util
+package vip.aridi.core.utils
 
 import com.mongodb.client.model.ReplaceOptions
 import com.mongodb.client.model.UpdateOptions
