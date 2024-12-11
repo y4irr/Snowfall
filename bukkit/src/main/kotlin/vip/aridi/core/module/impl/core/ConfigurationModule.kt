@@ -3,7 +3,9 @@ package vip.aridi.core.module.impl.core
 import vip.aridi.core.module.IModule
 import vip.aridi.core.utils.Configuration
 import vip.aridi.core.Snowfall
+import vip.aridi.core.module.BukkitManager.Companion.configModule
 import vip.aridi.core.module.ModuleCategory
+import vip.aridi.core.module.SharedManager
 
 /*
  * This project can't be redistributed without
@@ -24,6 +26,12 @@ class ConfigurationModule: IModule {
     override fun category(): ModuleCategory = ModuleCategory.CORE
 
     override fun load() {
+        SharedManager.mongoUri = databaseConfig.config.getString("MONGO.URI")
+        SharedManager.mongoDbName = databaseConfig.config.getString("MONGO.NAME")
+        SharedManager.redisIp = databaseConfig.config.getString("REDIS.IP")
+        SharedManager.redisPort = databaseConfig.config.getInt("REDIS.PORT")
+        SharedManager.redisChannel = databaseConfig.config.getString("REDIS.CHANNEL")
+        SharedManager.redisPassword = databaseConfig.config.getString("REDIS.PASSWORD")
     }
 
     override fun unload() {
