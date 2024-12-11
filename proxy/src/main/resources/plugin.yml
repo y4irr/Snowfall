@@ -1,0 +1,4 @@
+main: vip.aridi.core.SnowfallProxy
+version: 1.0-SNAPSHOT
+author: Yair
+name: Snowfall

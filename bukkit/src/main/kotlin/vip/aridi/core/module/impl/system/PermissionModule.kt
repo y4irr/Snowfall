@@ -9,6 +9,7 @@ import vip.aridi.core.Snowfall
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.module.BukkitManager
+import vip.aridi.core.module.SharedManager
 import vip.aridi.core.permissions.CustomPermissible
 import vip.aridi.core.permissions.PermissionUpdateEvent
 import vip.aridi.core.permissions.listener.PermissionListener
@@ -32,7 +33,7 @@ class PermissionModule: IModule {
 
     override fun load() {
         PermissionListener(Snowfall.get())
-        BukkitManager.databaseModule.redisAPI.addListener(StarPermissionListener())
+        SharedManager.databaseModule.redisAPI.addListener(StarPermissionListener())
     }
 
     override fun unload() {

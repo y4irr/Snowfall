@@ -1,12 +1,11 @@
 package vip.aridi.core.module.impl.core
 
 import com.mongodb.client.model.Filters
-import vip.aridi.core.module.IModule
-import vip.aridi.core.profile.Profile
 import org.bson.Document
+import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
-import vip.aridi.core.module.BukkitManager
 import vip.aridi.core.module.SharedManager
+import vip.aridi.core.profile.Profile
 import vip.aridi.core.utils.MongoUtil
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -16,17 +15,14 @@ import java.util.concurrent.ConcurrentHashMap
  * authorization of the developer
  *
  * Project @ Snowfall
- * @author Yair © 2024
- * Date: 08 - nov
+ * @author YairSoto © 2024
+ * Date: 09 - dic
  */
 
-class ProfileModule : IModule {
+class ProfileModule: IModule {
+    override fun order() = 3
 
-    override fun order(): Int {
-        return 3
-    }
-
-    override fun category(): ModuleCategory = ModuleCategory.CORE
+    override fun category() = ModuleCategory.SYSTEM
 
     override fun load() {
         val consoleProfile = Profile(CONSOLE_ID, "Console")
@@ -37,9 +33,7 @@ class ProfileModule : IModule {
 
     override fun reload() {}
 
-    override fun moduleName(): String {
-        return "Profile"
-    }
+    override fun moduleName() = "Profile"
 
     fun getProfile(name: String): Profile? {
         return try {
@@ -63,31 +57,11 @@ class ProfileModule : IModule {
         }.toList()
     }
 
-    fun deleteProfile(id: UUID): Profile? {
-        return try {
-            val document = SharedManager.databaseModule.getCollection("profiles").findOneAndDelete(Filters.eq("_id", id.toString()))
-            document?.let { fromDocument(it) }
-        } catch (e: Exception) {
-            null
-        }
-    }
-
-    fun updateId(id: UUID, name: String) {
-        try {
-            val collection = SharedManager.databaseModule.getCollection("profiles")
-            val filter = Filters.eq("_id", id.toString())
-            val update = Document("\$set", Document("name", name))
-            collection.updateOne(filter, update)
-        } catch (_: Exception) {
-        }
-    }
-
-
-    fun loadProfile(name: String): Profile? {
+    private fun loadProfile(name: String): Profile? {
         val document = SharedManager.databaseModule.getCollection("profiles").find(Filters.eq("name", name)).first()
 
         return if (document == null) {
-            val profile = Profile(UUID.randomUUID(), name) // Fallback to a random UUID if not found
+            val profile = Profile(UUID.randomUUID(), name)
             toSave(profile)
             profile
         } else {
@@ -99,7 +73,7 @@ class ProfileModule : IModule {
         val document = SharedManager.databaseModule.getCollection("profiles").find(Filters.eq("_id", id.toString())).first()
 
         return if (document == null) {
-            val profile = Profile(id, "Unknown")
+            val profile = Profile(id, "???")
             toSave(profile)
             profile
         } else {
@@ -141,33 +115,6 @@ class ProfileModule : IModule {
         }
     }
 
-    fun updateProfile(profile: Profile) {
-        try {
-            val profileDocument = Document()
-            profileDocument["_id"] = profile.id.toString()
-            profileDocument["name"] = profile.name
-            profileDocument["frozen"] = profile.frozen
-            profileDocument["coins"] = profile.coins
-
-            SharedManager.databaseModule.getCollection("profiles").replaceOne(
-                Filters.eq("_id", profile.id.toString()),
-                profileDocument
-            )
-        } catch (ignored: Exception) {
-        }
-    }
-
-    fun isProfiled(id: UUID): Boolean {
-        return try {
-            val document = SharedManager.databaseModule.getCollection("profiles")
-                .find(Filters.eq("_id", id.toString()))
-                .first()
-            document != null
-        } catch (e: Exception) {
-            false
-        }
-    }
-
     fun toSave(profile: Profile): Boolean {
         val profileDocument = Document().apply {
             this["_id"] = profile.id.toString()
@@ -184,7 +131,5 @@ class ProfileModule : IModule {
         return result.wasAcknowledged()
     }
 
-    companion object {
-        val CONSOLE_ID = UUID.fromString("f78a4d8d-d51b-4b39-98a3-230f2de0c670")
-    }
+    val CONSOLE_ID = UUID.randomUUID()
 }
