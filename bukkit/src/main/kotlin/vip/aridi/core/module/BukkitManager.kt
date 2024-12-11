@@ -52,14 +52,6 @@ class BukkitManager: ModuleLifecycleManager {
     }
 
     private fun initModules() {
-        SharedManager.databaseModule = DatabaseModule(
-            configModule.databaseConfig.config.getString("MONGO.URI"),
-            configModule.databaseConfig.config.getString("MONGO.NAME"),
-            configModule.databaseConfig.config.getString("REDIS.IP"),
-            configModule.databaseConfig.config.getInt("REDIS.PORT"),
-            configModule.databaseConfig.config.getString("REDIS.CHANNEL"),
-            configModule.databaseConfig.config.getString("REDIS.PASSWORD")
-        )
 
         addModules(configModule)
         addModules(SharedManager.databaseModule)
@@ -87,6 +79,7 @@ class BukkitManager: ModuleLifecycleManager {
             { it.order() }
         )).forEach {
             it.load()
+
             logger.info("[Module System] ${it.moduleName()} from bukkit loaded successfully")
         }
     }
