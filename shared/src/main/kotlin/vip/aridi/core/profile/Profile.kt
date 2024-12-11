@@ -16,8 +16,24 @@ class Profile(
     var name: String
 ) {
 
+    var chatColor: String = "WHITE"
+
+    var currentServer: String? = null
+    var lastServer: String? = null
+
     var frozen = false
+
     var coins = 0
+    var discordId: String? = null
+
     var root = false
+    var online: Boolean = false
+
+    var address: String? = null
+    var addresses: MutableList<String> = mutableListOf()
+
+    var firstJoined: Long = System.currentTimeMillis()
+    var lastJoined: Long? = null
+
     var permissions: MutableList<String> = mutableListOf()
 }

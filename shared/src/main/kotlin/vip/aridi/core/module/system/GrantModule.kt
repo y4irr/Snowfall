@@ -78,6 +78,13 @@ class GrantModule: IModule {
         return update
     }
 
+    fun findBestRank(grants: MutableSet<Grant>): Rank {
+
+        val grantedRank = grants.filter{!it.isVoided() && !it.isRemoved()}.mapNotNull{ it.getRank() }.sortedBy{ it.priority }.reversed().firstOrNull() ?: SharedManager.rankModule.defaultRank
+
+        return grantedRank
+    }
+
     fun findGrantedRank(uuid: UUID): Rank {
         return grant[uuid] ?: SharedManager.rankModule.defaultRank
     }

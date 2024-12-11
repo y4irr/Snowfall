@@ -1,6 +1,8 @@
 package vip.aridi.core.module.core
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.LongSerializationPolicy
 import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoClients
 import com.mongodb.client.MongoCollection
@@ -8,6 +10,12 @@ import org.bson.Document
 import redis.clients.jedis.JedisPool
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
+import vip.aridi.core.module.SharedManager.mongoDbName
+import vip.aridi.core.module.SharedManager.mongoUri
+import vip.aridi.core.module.SharedManager.redisChannel
+import vip.aridi.core.module.SharedManager.redisIp
+import vip.aridi.core.module.SharedManager.redisPassword
+import vip.aridi.core.module.SharedManager.redisPort
 import vip.aridi.star.RedisStarAPI
 import vip.aridi.star.StarAPI
 
@@ -20,16 +28,10 @@ import vip.aridi.star.StarAPI
  * Date: 23 - nov
  */
 
-class DatabaseModule(
-    val mongoUri: String,
-    val mongoDbName: String,
-    val redisIp: String,
-    val redisPort: Int,
-    val redisChannel: String,
-    val redisPassword: String
-) : IModule {
+class DatabaseModule: IModule {
 
     private lateinit var client: MongoClient
+    val gson: Gson = GsonBuilder().setLongSerializationPolicy(LongSerializationPolicy.STRING).create()
     lateinit var database: com.mongodb.client.MongoDatabase
     lateinit var jedisPool: JedisPool
     lateinit var redisAPI: StarAPI

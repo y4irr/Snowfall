@@ -1,7 +1,7 @@
 package vip.aridi.core.grant.service
 
 import vip.aridi.core.grant.Grant
-import vip.aridi.core.module.ModuleManager
+import vip.aridi.core.module.SharedManager
 import java.util.UUID
 
 /*
@@ -13,7 +13,7 @@ import java.util.UUID
  * Date: 15 - nov
  */
 class GrantExpiryService: Runnable {
-    private val module = ModuleManager.grantModule
+    private val module = SharedManager.grantModule
 
     override fun run() {
         val expiredGrants = mutableListOf<Pair<UUID, Grant>>()
