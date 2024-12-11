@@ -1,3 +1,7 @@
+CHAT-FORMAT:
+  ENABLED: true
+  FORMAT: "{rank}{name}: {message}"
+
 LINKS:
   DISCORD: ""
   TEAMSPEAK: ""
