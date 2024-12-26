@@ -22,7 +22,7 @@ dependencies {
     implementation 'vip.aridi:Star:1.0-SNAPSHOT'
 
 
-    implementation fileTree(dir: '.lib', include: '*.jar')
+    compileOnly fileTree(dir: '.lib', include: '*.jar')
 }
 
 tasks.withType(JavaCompile) {
