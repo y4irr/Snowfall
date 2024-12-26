@@ -9,7 +9,6 @@ import vip.aridi.core.module.ProxyManager
 import vip.aridi.core.module.SharedManager
 import vip.aridi.core.permission.PermissionListener
 import vip.aridi.core.permission.StarPermissionListener
-import vip.aridi.core.module.impl.core.ProfileModule
 
 /*
  * This project can't be redistributed without
@@ -45,7 +44,7 @@ class PermissionModule
     fun update(player: ProxiedPlayer) {
         val permissions = ArrayList<String>()
 
-        permissions.addAll((SharedManager.grantModule.active[player.uniqueId] ?: ArrayList()).flatMap { it.getRank()?.permission ?: HashSet() })
+        permissions.addAll((SharedManager.grantModule.active[player.uniqueId] ?: ArrayList()).flatMap { it.getRank()?.permissions ?: HashSet() })
         permissions.addAll(ProxyManager.profileModule.getProfile(player.uniqueId)?.permissions ?: ArrayList())
 
         ProxyManager.profileModule.calculatePermissions(permissions, true)

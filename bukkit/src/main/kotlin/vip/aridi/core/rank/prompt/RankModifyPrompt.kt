@@ -43,7 +43,7 @@ class RankModifyPrompt(
             field.isAccessible = true
 
             when (toEdit) {
-                "permission" -> handlePermissions(input, field)
+                "permissions" -> handlePermissions(input, field)
                 "displayName" -> handleDisplay(input)
                 "price" -> handlePrice(input, field)
                 "prefix" -> handlePrefix(input)

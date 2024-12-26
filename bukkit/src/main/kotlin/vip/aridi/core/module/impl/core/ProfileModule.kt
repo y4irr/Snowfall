@@ -4,6 +4,10 @@ import com.mongodb.client.model.Filters
 import vip.aridi.core.module.IModule
 import vip.aridi.core.profile.Profile
 import org.bson.Document
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.module.BukkitManager
 import vip.aridi.core.module.SharedManager
@@ -22,6 +26,12 @@ import java.util.concurrent.ConcurrentHashMap
 
 class ProfileModule : IModule {
 
+    private var profiles = mutableMapOf<UUID, Profile>()
+    private var profilesByName = mutableMapOf<String, Profile>()
+
+    private val uuidToName = ConcurrentHashMap<UUID,String>()
+    private val nameToUuid = ConcurrentHashMap<String,UUID>()
+
     override fun order(): Int {
         return 3
     }
@@ -30,10 +40,23 @@ class ProfileModule : IModule {
 
     override fun load() {
         val consoleProfile = Profile(CONSOLE_ID, "Console")
-        this.toSave(consoleProfile)
+        this.updateProfile(consoleProfile)
+
+        SharedManager.databaseModule.getCollection("profiles").find().iterator().forEachRemaining{
+            val name = it.getString("name")
+            val uuid = UUID.fromString(it.getString("_id"))
+
+            uuidToName[uuid] = name
+            nameToUuid[name] = uuid
+        }
+
+        uuidToName[CONSOLE_ID] = "CONSOLE"
+        nameToUuid["Console"] = CONSOLE_ID
     }
 
-    override fun unload() {}
+    override fun unload() {
+
+    }
 
     override fun reload() {}
 
@@ -41,20 +64,53 @@ class ProfileModule : IModule {
         return "Profile"
     }
 
+    fun findById(id: UUID): Profile? {
+        return profiles[id]
+    }
+
+    fun findId(name: String):UUID? {
+        return nameToUuid[name]
+    }
+
+    fun findName(id: UUID):String {
+        return uuidToName[id] ?: "null"
+    }
+
     fun getProfile(name: String): Profile? {
-        return try {
-            loadProfile(name)
+        val profile = this.profilesByName[name]
+        try {
+            if (profile == null) {
+                return this.loadProfile(name)
+            }
         } catch (_: Exception) {
-            null
+            return null
         }
+        return profile
+    }
+
+    fun updateId(id: UUID,name: String) {
+        uuidToName[id] = name
+        nameToUuid[name] = id
+    }
+
+    fun getProfile(sender: CommandSender): Profile? {
+        return this.getProfile(sender.name)
+    }
+
+    fun getProfile(player: Player): Profile? {
+        return this.getProfile(player.uniqueId)
     }
 
     fun getProfile(id: UUID): Profile? {
-        return try {
-            loadProfile(id)
+        val profile = this.profiles[id]
+        try {
+            if (profile == null) {
+                return this.loadProfile(id)
+            }
         } catch (_: Exception) {
-            null
+            return null
         }
+        return profile
     }
 
     fun getProfiles(): List<Profile> {
@@ -63,63 +119,56 @@ class ProfileModule : IModule {
         }.toList()
     }
 
-    fun deleteProfile(id: UUID): Profile? {
-        return try {
-            val document = SharedManager.databaseModule.getCollection("profiles").findOneAndDelete(Filters.eq("_id", id.toString()))
-            document?.let { fromDocument(it) }
-        } catch (e: Exception) {
-            null
-        }
-    }
-
-    fun updateId(id: UUID, name: String) {
-        try {
-            val collection = SharedManager.databaseModule.getCollection("profiles")
-            val filter = Filters.eq("_id", id.toString())
-            val update = Document("\$set", Document("name", name))
-            collection.updateOne(filter, update)
-        } catch (_: Exception) {
-        }
-    }
-
-
     fun loadProfile(name: String): Profile? {
         val document = SharedManager.databaseModule.getCollection("profiles").find(Filters.eq("name", name)).first()
 
-        return if (document == null) {
-            val profile = Profile(UUID.randomUUID(), name) // Fallback to a random UUID if not found
+        if (document == null) {
+            val profile = Profile(Bukkit.getOfflinePlayer(name).uniqueId, name)
             toSave(profile)
-            profile
-        } else {
-            fromDocument(document)
+            return profile
         }
+
+        return fromDocument(document)
     }
 
-    private fun loadProfile(id: UUID): Profile? {
+    fun loadProfile(id: UUID): Profile? {
         val document = SharedManager.databaseModule.getCollection("profiles").find(Filters.eq("_id", id.toString())).first()
 
-        return if (document == null) {
-            val profile = Profile(id, "Unknown")
+        if (document == null) {
+            val profile = Profile(id, Bukkit.getOfflinePlayer(id).name ?: "Unknown")
             toSave(profile)
-            profile
-        } else {
-            fromDocument(document)
+            return profile
         }
+
+        return fromDocument(document)
+    }
+
+    fun isCached(uuid: UUID):Boolean {
+        return uuidToName.contains(uuid)
+    }
+
+    fun updateProfile(profile: Profile) {
+        this.profiles[profile.id] = profile
+        this.profilesByName[profile.name] = profile
+    }
+
+    fun deleteProfile(id: UUID): Profile? {
+        return this.profiles.remove(id)
     }
 
     fun calculatePermissions(permissions: ArrayList<String>, defaultPermissions: Boolean): ConcurrentHashMap<String, Boolean> {
-        val toReturn = ConcurrentHashMap<String, Boolean>()
+        val toReturn = ConcurrentHashMap<String,Boolean>()
 
         if (defaultPermissions) {
-            toReturn.putAll(SharedManager.rankModule.defaultRank.permission.associate {
+            toReturn.putAll(SharedManager.rankModule.defaultRank.permissions.associate{
                 val value = !it.startsWith("-")
-                return@associate (if (value) it else it.substring(1)).lowercase() to value
+                return@associate (if (value) it else it.substring(1)).toLowerCase() to value
             })
         }
 
-        toReturn.putAll(permissions.associate {
+        toReturn.putAll(permissions.associate{
             val value = !it.startsWith("-")
-            return@associate (if (value) it else it.substring(1)).lowercase() to value
+            return@associate (if (value) it else it.substring(1)).toLowerCase() to value
         })
 
         return toReturn
@@ -141,40 +190,34 @@ class ProfileModule : IModule {
         }
     }
 
-    fun updateProfile(profile: Profile) {
-        try {
-            val profileDocument = Document()
-            profileDocument["_id"] = profile.id.toString()
-            profileDocument["name"] = profile.name
-            profileDocument["frozen"] = profile.frozen
-            profileDocument["coins"] = profile.coins
-
-            SharedManager.databaseModule.getCollection("profiles").replaceOne(
-                Filters.eq("_id", profile.id.toString()),
-                profileDocument
-            )
-        } catch (ignored: Exception) {
-        }
-    }
-
-    fun isProfiled(id: UUID): Boolean {
-        return try {
-            val document = SharedManager.databaseModule.getCollection("profiles")
-                .find(Filters.eq("_id", id.toString()))
-                .first()
-            document != null
-        } catch (e: Exception) {
-            false
-        }
-    }
-
     fun toSave(profile: Profile): Boolean {
-        val profileDocument = Document().apply {
-            this["_id"] = profile.id.toString()
-            this["name"] = profile.name
-            this["frozen"] = profile.frozen
-            this["coins"] = profile.coins
-        }
+        BukkitManager.profileModule.updateProfile(profile)
+
+        val profileDocument = Document()
+        profileDocument["_id"] = profile.id.toString()
+        profileDocument["name"] = profile.name
+
+        profileDocument["chatColor"] = profile.chatColor
+
+        profileDocument["currentServer"] = profile.currentServer
+        profileDocument["lastServer"] = profile.lastServer
+
+        profileDocument["frozen"] = profile.frozen
+
+        profileDocument["coins"] = profile.coins
+
+        profileDocument["discordId"] = profile.discordId
+
+        profileDocument["root"] = profile.root
+        profileDocument["online"] = profile.online
+
+        profileDocument["address"] = profile.addresses
+        profileDocument["addresses"] = profile.addresses
+
+        profileDocument["firstJoined"] = profile.firstJoined
+        profileDocument["lastJoined"] = profile.lastJoined
+
+        profileDocument["permissions"] = profile.permissions
 
         val result = SharedManager.databaseModule.getCollection("profiles").replaceOne(
             Filters.eq("_id", profile.id.toString()),
@@ -186,5 +229,7 @@ class ProfileModule : IModule {
 
     companion object {
         val CONSOLE_ID = UUID.fromString("f78a4d8d-d51b-4b39-98a3-230f2de0c670")
+
+        val NULL_PROFILE = "${ChatColor.RED}Your profile hasn't loaded, please re-join or contact an administrator."
     }
 }

@@ -32,7 +32,7 @@ class RankDeserializer : JsonDeserializer<Rank> {
         rank.priority = jsonObject["priority"]?.asInt ?: 0
         rank.color = jsonObject["color"]?.asString ?: "GREEN"
         rank.defaultRank = jsonObject["defaultRank"]?.asBoolean ?: false
-        rank.permission = jsonObject["permission"]?.asJsonArray?.map { it.asString }?.toMutableList() ?: mutableListOf()
+        rank.permissions = jsonObject["permissions"]?.asJsonArray?.map { it.asString }?.toMutableList() ?: mutableListOf()
         rank.inheritance = jsonObject["inheritance"]?.asJsonArray?.map { it.asString }?.toMutableList() ?: mutableListOf()
         rank.hidden = jsonObject["hidden"]?.asBoolean ?: false
         rank.staff = jsonObject["staff"]?.asBoolean ?: false

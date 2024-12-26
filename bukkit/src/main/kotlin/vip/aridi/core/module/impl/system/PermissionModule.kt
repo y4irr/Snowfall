@@ -12,9 +12,9 @@ import vip.aridi.core.module.BukkitManager
 import vip.aridi.core.module.SharedManager
 import vip.aridi.core.permissions.CustomPermissible
 import vip.aridi.core.permissions.PermissionUpdateEvent
-import vip.aridi.core.permissions.listener.PermissionListener
 import vip.aridi.core.profile.Profile
 import vip.aridi.core.star.StarPermissionListener
+import vip.aridi.star.event.StarEvent
 import java.lang.reflect.Field
 
 /*
@@ -27,12 +27,13 @@ import java.lang.reflect.Field
  */
 
 class PermissionModule: IModule {
-    override fun order(): Int = 4
+    override fun order(): Int = 3
 
     override fun category(): ModuleCategory = ModuleCategory.SYSTEM
 
     override fun load() {
-        PermissionListener(Snowfall.get())
+        HUMAN_ENTITY_PERMISSIBLE_FIELD.isAccessible = true
+
         SharedManager.databaseModule.redisAPI.addListener(StarPermissionListener())
     }
 
@@ -55,7 +56,15 @@ class PermissionModule: IModule {
     }
 
     fun update(player: Player, clear: Boolean): Boolean {
-        val permissible = getPermissible(player) as? CustomPermissible ?: return false
+        val permissible = getPermissible(player)
+
+        if (permissible !is CustomPermissible) {
+            return false
+        }
+
+        println("Permissible: ${permissible.permissions}")
+        /*permissible.recalculatePermissions()
+        player.recalculatePermissions()*/
 
         runAsync {
             runSync {
@@ -81,17 +90,19 @@ class PermissionModule: IModule {
                 addProperty("remove", remove)
                 addProperty("permission", permission)
             }
+
+            SharedManager.databaseModule.redisAPI.sendEvent(StarEvent(SharedManager.UPDATE_PERMISSION, jsonObject))
         }
 
         return updateSuccess
     }
 
-    fun getPermissible(player: Player): Permissible {
-        return humanEntityPermissibleField.get(player) as Permissible
+    fun getPermissible(player: Player):Permissible {
+        return HUMAN_ENTITY_PERMISSIBLE_FIELD.get(player) as Permissible
     }
 
-    fun setPermissible(player: Player, permissible: Permissible) {
-        humanEntityPermissibleField.set(player, permissible)
+    fun setPermissible(player: Player,permissible: Permissible) {
+        HUMAN_ENTITY_PERMISSIBLE_FIELD.set(player, permissible)
     }
 
     private fun checkThread() {
@@ -107,4 +118,6 @@ class PermissionModule: IModule {
     private fun runAsync(action: () -> Unit) {
         server.scheduler.runTaskAsynchronously(core, action)
     }
+
+    private val HUMAN_ENTITY_PERMISSIBLE_FIELD: Field = CraftHumanEntity::class.java.getDeclaredField("perm")
 }

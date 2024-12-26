@@ -85,7 +85,7 @@ class ProfileModule: IModule {
         val toReturn = ConcurrentHashMap<String, Boolean>()
 
         if (defaultPermissions) {
-            toReturn.putAll(SharedManager.rankModule.defaultRank.permission.associate {
+            toReturn.putAll(SharedManager.rankModule.defaultRank.permissions.associate {
                 val value = !it.startsWith("-")
                 return@associate (if (value) it else it.substring(1)).lowercase() to value
             })

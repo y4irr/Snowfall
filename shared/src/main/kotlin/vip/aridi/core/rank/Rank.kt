@@ -17,7 +17,7 @@ class Rank (
     var priority: Int = 0,
     var color: String = "GREEN",
     var defaultRank: Boolean = false,
-    var permission: MutableList<String> = mutableListOf(),
+    var permissions: MutableList<String> = mutableListOf(),
     var inheritance: MutableList<String> = mutableListOf(),
     var createdAt: Long? = null,
     var hidden: Boolean = false,

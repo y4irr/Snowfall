@@ -104,12 +104,18 @@ class ViewButton(
 
         val senderProfile = BukkitManager.profileModule.getProfile(player.uniqueId) ?: return
 
-        if (voided || removed) {
+        if (removed) {
+            player.sendMessage(CC.translate("&cThis rank is already removed and cannot be removed again."))
+            return
+        }
+
+        if (voided) {
             if (senderProfile.root) {
                 player.closeInventory()
                 SharedManager.grantModule.deleteGrantById(grant.id)
                 GrantsMenu(SharedManager.grantModule.findAllByPlayer(target.id), target).openMenu(player)
             }
+            return
         }
 
         player.closeInventory()

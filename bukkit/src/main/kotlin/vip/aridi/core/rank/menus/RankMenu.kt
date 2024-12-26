@@ -91,7 +91,7 @@ class RankMenu: PaginatedMenu() {
             description.add("&d${UnicodeUtil.VERTICAL_LINE} &fPrefix&7: &d${rank.prefix}")
         }
         description.add(" &d${UnicodeUtil.VERTICAL_LINE} &fWeight&7: &d${rank.priority}")
-        description.add(" &d${UnicodeUtil.VERTICAL_LINE} &fPermissions&7: &d${rank.permission.size}")
+        description.add(" &d${UnicodeUtil.VERTICAL_LINE} &fPermissions&7: &d${rank.permissions.size}")
         description.add("")
         description.add(styleAction(ChatColor.GREEN, "LEFT-CLICK", "to manage rank"))
         description.add(styleAction(ChatColor.RED, "RIGHT-CLICK", "to delete rank"))

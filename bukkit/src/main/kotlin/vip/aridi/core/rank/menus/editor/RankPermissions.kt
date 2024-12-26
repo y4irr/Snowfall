@@ -7,7 +7,6 @@ import org.bukkit.conversations.NullConversationPrefix
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import vip.aridi.core.Snowfall
-import vip.aridi.core.module.BukkitManager
 import vip.aridi.core.module.SharedManager
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.rank.menus.RankEditor
@@ -42,7 +41,7 @@ class RankPermissions(
 
     override fun getAllPagesButtons(player: Player?): MutableMap<Int, Button> {
         return hashMapOf<Int, Button>().also { toReturn ->
-            rank.permission.forEachIndexed { index, permission ->
+            rank.permissions.forEachIndexed { index, permission ->
                 toReturn[index] = object : Button() {
                     override fun getName(var1: Player?): String {
                         return "&d&lPermission #$index. "
@@ -61,7 +60,7 @@ class RankPermissions(
                     }
 
                     override fun clicked(player: Player, slot: Int, clickType: ClickType) {
-                        this@RankPermissions.rank.permission.remove(permission)
+                        this@RankPermissions.rank.permissions.remove(permission)
                         SharedManager.rankModule.updateRank(rank)
                     }
                 }

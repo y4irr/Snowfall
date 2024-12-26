@@ -79,13 +79,13 @@ class RankEditor(
             .name("&d&lRank Permissions")
             .lore(listOf(
                 "",
-                " &d${UnicodeUtil.VERTICAL_LINE} &fCurrent&7: &d${rank.permission.size}",
+                " &d${UnicodeUtil.VERTICAL_LINE} &fCurrent&7: &d${rank.permissions.size}",
                 "",
                 "&eClick here to manage the rank permissions"
             ))
             .action(ClickType.LEFT) {
                 player.closeInventory()
-                startPrompt(player, "permission")
+                startPrompt(player, "permissions")
             }
             .action(ClickType.RIGHT) {
                 player.closeInventory()

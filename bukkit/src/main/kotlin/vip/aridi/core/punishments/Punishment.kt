@@ -5,6 +5,7 @@ import com.mongodb.client.model.Filters
 import com.mongodb.client.model.UpdateOptions
 import org.bson.Document
 import vip.aridi.core.module.BukkitManager
+import vip.aridi.core.module.SharedManager
 import java.util.UUID
 
 /*
@@ -22,7 +23,7 @@ class Punishment {
     private val punishmentLogs = mutableListOf<PunishmentLog>()
 
     fun loadPunishments() {
-        val cursor = BukkitManager.databaseModule.getCollection("punishments").find().iterator()
+        val cursor = SharedManager.databaseModule.getCollection("punishments").find().iterator()
         cursor.use {
             while (cursor.hasNext()) {
                 val punishmentData = gson.fromJson(cursor.next().toJson(), PunishmentData::class.java)
@@ -88,7 +89,7 @@ class Punishment {
     }
     private fun savePunishment(punishmentData: PunishmentData): Boolean {
         activePunishments[punishmentData.id] = punishmentData
-        return BukkitManager.databaseModule.getCollection("punishments").updateOne(
+        return SharedManager.databaseModule.getCollection("punishments").updateOne(
             Filters.eq("_id", punishmentData.id.toString()),
             Document("\$set", Document.parse(gson.toJson(punishmentData))),
             UpdateOptions().upsert(true)
