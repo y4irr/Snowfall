@@ -26,21 +26,20 @@ class GrantBukkitAdapter : GrantModule.GrantAdapter {
     private val server = core.server
 
     override fun onGrantApply(uuid: UUID, grant: Grant) {
-        getPlayer(uuid)?.let { player ->
-            BukkitManager.permissionModule.update(player, true)
-            runEvent {
-                println("Grant applied")
-                server.pluginManager.callEvent(GrantApplyEvent(player, grant))
-            }
+        val player = Snowfall.get().server.getPlayer(uuid) ?: return
+
+        BukkitManager.permissionModule.update(player, false)
+        runEvent {
+            server.pluginManager.callEvent(GrantApplyEvent(player, grant))
         }
     }
 
     override fun onGrantChange(uuid: UUID, grant: Grant) {
-
     }
 
     override fun onGrantExpire(uuid: UUID, grant: Grant) {
         getPlayer(uuid)?.let { player ->
+            BukkitManager.permissionModule.update(player, true)
             grant.getRank()?.takeIf { it.hidden }?.let { rank ->
                 player.sendMessage("${ChatColor.LIGHT_PURPLE}Your ${rank.displayName}${ChatColor.LIGHT_PURPLE} rank has expired.")
             }
@@ -52,7 +51,9 @@ class GrantBukkitAdapter : GrantModule.GrantAdapter {
     override fun onGrantRemove(uuid: UUID, grant: Grant) {
         getPlayer(uuid)?.let { player ->
             BukkitManager.permissionModule.update(player, true)
-            runEvent { server.pluginManager.callEvent(GrantRemoveEvent(player, grant)) }
+            runEvent {
+                server.pluginManager.callEvent(GrantRemoveEvent(player, grant))
+            }
         }
     }
 
