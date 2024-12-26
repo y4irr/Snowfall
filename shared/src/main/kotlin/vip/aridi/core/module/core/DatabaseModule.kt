@@ -48,7 +48,7 @@ class DatabaseModule: IModule {
                 redisPort
             )
             redisAPI = RedisStarAPI(
-                Gson(),
+                gson,
                 jedisPool,
                 redisChannel,
                 redisPassword
