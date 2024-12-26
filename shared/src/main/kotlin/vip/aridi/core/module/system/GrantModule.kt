@@ -46,6 +46,7 @@ class GrantModule: IModule {
     override fun category(): ModuleCategory = ModuleCategory.SYSTEM
 
     override fun load() {
+        expiryService = GrantExpiryService()
         collection = SharedManager.databaseModule.getCollection("grants")
         SharedManager.databaseModule.redisAPI.addListener(StarGrantListener())
     }
@@ -86,8 +87,13 @@ class GrantModule: IModule {
     }
 
     fun findGrantedRank(uuid: UUID): Rank {
-        return grant[uuid] ?: SharedManager.rankModule.defaultRank
+        val grantedRank = SharedManager.grantModule.findAllByPlayer(uuid).filter{!it.isVoided() && !it.isRemoved()}.mapNotNull{ it.getRank() }.sortedBy{ it.priority }.reversed().firstOrNull() ?: SharedManager.rankModule.defaultRank
+        return grantedRank
     }
+
+    /*fun findGrantedRank(uuid: UUID): Rank {
+        return grant[uuid] ?: SharedManager.rankModule.defaultRank
+    }*/
 
     fun remove(grant: Grant, remover: UUID, reason: String): Boolean {
         grant.removerId = remover
@@ -118,7 +124,15 @@ class GrantModule: IModule {
     }
 
     fun setGrant(uuid: UUID, grants: Collection<Grant>) {
-        grant[uuid] = (grants.filter{!it.isVoided() && !it.isRemoved()}.mapNotNull {it.getRank()}.sortedBy{ it.priority }.reversed().firstOrNull() ?: SharedManager.rankModule.defaultRank)
+        val filteredGrants = grants.filter { !it.isVoided() && !it.isRemoved() }
+        //grant[uuid] = ( grants.filter{! it.isVoided() && !it.isRemoved() }.mapNotNull { it.getRank() }.sortedBy{ it.priority }.reversed().firstOrNull() ?: SharedManager.rankModule.defaultRank)
+        grant[uuid] = (
+                filteredGrants
+                    .mapNotNull { it.getRank() }
+                    .sortedBy { it.priority }
+                    .reversed()
+                    .firstOrNull() ?: SharedManager.rankModule.defaultRank
+                )
     }
 
     fun findGrantsBySender(sender: UUID): Set<Grant> {
