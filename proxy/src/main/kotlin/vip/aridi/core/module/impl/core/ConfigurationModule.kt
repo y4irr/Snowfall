@@ -1,10 +1,13 @@
 package vip.aridi.core.module.impl.core
 
+import net.md_5.bungee.config.Configuration
+import net.md_5.bungee.config.ConfigurationProvider
+import net.md_5.bungee.config.YamlConfiguration
 import vip.aridi.core.SnowfallProxy
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.module.SharedManager
-import vip.aridi.core.utils.Configuration
+import java.io.File
 
 /*
  * This project can't be redistributed without
@@ -16,30 +19,28 @@ import vip.aridi.core.utils.Configuration
  */
 
 class ConfigurationModule: IModule {
-    var mainConfig: Configuration = Configuration(SnowfallProxy.instance, "config")
-    var databaseConfig: Configuration = Configuration(SnowfallProxy.instance, "database")
+    var mainConfig: Configuration = ConfigurationProvider.getProvider(YamlConfiguration::class.java).load(File(SnowfallProxy.instance.dataFolder, "config.yml"))
+    var databaseConfig: Configuration = ConfigurationProvider.getProvider(YamlConfiguration::class.java).load(File(SnowfallProxy.instance.dataFolder, "database.yml"))
 
     override fun order() = 1
 
     override fun category() = ModuleCategory.CORE
 
     override fun load() {
-        SharedManager.mongoUri = databaseConfig.config["MONGO.URI"].toString()
-        SharedManager.mongoDbName = databaseConfig.config["MONGO.NAME"].toString()
-        SharedManager.redisIp = databaseConfig.config["REDIS.IP"].toString()
-        SharedManager.redisPort = databaseConfig.config["REDIS.PORT"] as Int
-        SharedManager.redisChannel = databaseConfig.config["REDIS.CHANNEL"].toString()
-        SharedManager.redisPassword = databaseConfig.config["REDIS.PASSWORD"].toString()
+        SharedManager.mongoUri = databaseConfig["MONGO.URI"].toString()
+        SharedManager.mongoDbName = databaseConfig["MONGO.NAME"].toString()
+        SharedManager.redisIp = databaseConfig["REDIS.IP"].toString()
+        SharedManager.redisPort = databaseConfig["REDIS.PORT"] as Int
+        SharedManager.redisChannel = databaseConfig["REDIS.CHANNEL"].toString()
+        SharedManager.redisPassword = databaseConfig["REDIS.PASSWORD"].toString()
+        SharedManager.redisChannel = databaseConfig["REDIS.CHANNEL"].toString()
+        SharedManager.redisPassword = databaseConfig["REDIS.PASSWORD"].toString()
     }
 
     override fun unload() {
-        mainConfig.save()
-        databaseConfig.save()
     }
 
     override fun reload() {
-        mainConfig.reload()
-        databaseConfig.reload()
     }
 
     override fun moduleName() = "Configuration"
