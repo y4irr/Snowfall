@@ -34,7 +34,9 @@ class CustomPermissible(player: Player) : PermissibleBase(player) {
         if (clear) permissions.clear()
 
         val calculatedPermissions = gatherPermissions()
-        calculatedPermissions.forEach { permissions[it.key.lowercase()] = it.value }
+        calculatedPermissions.entries.forEach {
+            permissions[it.key.lowercase()] = it.value
+        }
     }
 
     override fun hasPermission(permission: Permission): Boolean {
@@ -64,15 +66,18 @@ class CustomPermissible(player: Player) : PermissibleBase(player) {
     }
 
     private fun gatherPermissions(): ConcurrentHashMap<String, Boolean> {
-        val allPermissions = ArrayList<String>()
 
-        allPermissions.addAll(SharedManager.grantModule.active[uuid]?.flatMap { it.getRank()?.permission ?: emptySet() } ?: emptyList())
-        allPermissions.addAll(BukkitManager.profileModule.getProfile(uuid)?.permissions ?: emptyList())
+        val permissions = ArrayList<String>()
 
-        val calculated = BukkitManager.profileModule.calculatePermissions(allPermissions, true)
-        calculated[Server.BROADCAST_CHANNEL_USERS] = true
+        permissions.addAll((SharedManager.grantModule.active[this.uuid] ?: ArrayList()).flatMap{it.getRank()?.permissions ?: HashSet()})
+        permissions.addAll(BukkitManager.profileModule.getProfile(this.uuid)?.permissions ?: ArrayList())
 
-        return ConcurrentHashMap(calculated)
+
+        val toReturn = BukkitManager.profileModule.calculatePermissions(permissions,true)
+
+        toReturn[Server.BROADCAST_CHANNEL_USERS] = true
+
+        return toReturn
     }
 
     override fun getEffectivePermissions(): MutableSet<PermissionAttachmentInfo> {
