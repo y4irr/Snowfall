@@ -3,6 +3,7 @@ package vip.aridi.core.module.impl.system
 import vip.aridi.core.module.IModule
 import vip.aridi.core.profile.listener.ProfileListener
 import vip.aridi.core.Snowfall
+import vip.aridi.core.listener.BukkitListener
 import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.permissions.listener.PermissionListener
 
@@ -16,13 +17,19 @@ import vip.aridi.core.permissions.listener.PermissionListener
  */
 
 class ListenersModule: IModule {
-    override fun order(): Int = 3
+    override fun order(): Int = 4
 
     override fun category(): ModuleCategory = ModuleCategory.SYSTEM
 
     override fun load() {
-        ProfileListener(Snowfall.get())
-        PermissionListener(Snowfall.get())
+        val listeners = listOf(
+            BukkitListener(),
+                ProfileListener(),
+                PermissionListener())
+
+        listeners.forEach {
+            Snowfall.get().server.pluginManager.registerEvents(it, Snowfall.get())
+        }
     }
 
     override fun unload() {
