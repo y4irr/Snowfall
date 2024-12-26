@@ -32,7 +32,7 @@ class GrantModule: IModule {
     val grant = HashMap<UUID, Rank>()
     val active = HashMap<UUID, ArrayList<Grant>>()
 
-    val expiryService = GrantExpiryService()
+    lateinit var expiryService: GrantExpiryService
     //Expiry Service
 
     private var adapter: Optional<GrantAdapter> = Optional.empty()
