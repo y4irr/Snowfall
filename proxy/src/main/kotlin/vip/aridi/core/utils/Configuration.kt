@@ -27,23 +27,30 @@ class Configuration(
     var config: Map<String, Any> = createFile()
 
     private fun createFile(): Map<String, Any> {
-        if (!file.exists()) {
-            file.parentFile.mkdirs()
-            val resourceStream = plugin.getResourceAsStream(file.name)
-            if (resourceStream == null) {
-                try {
-                    file.createNewFile()
-                } catch (e: IOException) {
-                    plugin.logger.log(Level.SEVERE, "Failed to create new file ${file.name}", e)
-                }
-            } else {
-                try {
+        try {
+            if (!file.parentFile.exists() && !file.parentFile.mkdirs()) {
+                plugin.logger.log(Level.SEVERE, "No se pudo crear el directorio: ${file.parentFile.path}")
+            }
+
+            if (!file.exists()) {
+                val resourceStream = plugin.getResourceAsStream(file.name)
+
+                if (resourceStream == null) {
+
+                    if (!file.createNewFile()) {
+                        plugin.logger.log(Level.SEVERE, "No se pudo crear el archivo: ${file.path}")
+                    }
+                } else {
                     Files.copy(resourceStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING)
-                } catch (e: IOException) {
-                    plugin.logger.log(Level.SEVERE, "Failed to save default file ${file.name}", e)
+                    plugin.logger.log(Level.INFO, "Archivo predeterminado copiado: ${file.path}")
                 }
             }
+        } catch (e: IOException) {
+            plugin.logger.log(Level.SEVERE, "Error al crear el archivo: ${file.name}", e)
+        } catch (e: Exception) {
+            plugin.logger.log(Level.SEVERE, "Error desconocido al crear el archivo: ${file.name}", e)
         }
+
         return loadConfig()
     }
 
