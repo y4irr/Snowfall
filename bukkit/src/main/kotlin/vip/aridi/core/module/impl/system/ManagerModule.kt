@@ -17,7 +17,7 @@ import vip.aridi.core.module.SharedManager
  */
 
 class ManagerModule: IModule {
-    override fun order(): Int = 5
+    override fun order(): Int = 4
 
     override fun category(): ModuleCategory = ModuleCategory.SYSTEM
 
