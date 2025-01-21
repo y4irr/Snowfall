@@ -2,6 +2,10 @@ package vip.aridi.core.module.impl.core
 
 import com.jonahseguin.drink.CommandService
 import com.jonahseguin.drink.Drink
+import com.jonahseguin.drink.parametric.DrinkProvider
+import org.bukkit.GameMode
+import org.bukkit.enchantments.Enchantment
+import org.bukkit.entity.Player
 import vip.aridi.core.Snowfall
 import vip.aridi.core.command.admin.grants.GrantCommand
 import vip.aridi.core.command.admin.grants.GrantsCommand
@@ -11,9 +15,7 @@ import vip.aridi.core.command.essentials.*
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.profile.Profile
-import vip.aridi.core.provider.DurationProvider
-import vip.aridi.core.provider.ProfileProvider
-import vip.aridi.core.provider.RankProvider
+import vip.aridi.core.provider.*
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.utils.Duration
 
@@ -33,9 +35,16 @@ class CommandsModule: IModule {
     override fun load() {
         val drink: CommandService = Drink.get(Snowfall.get())
 
-        drink.bind(Profile::class.java).toProvider(ProfileProvider())
-        drink.bind(Rank::class.java).toProvider(RankProvider())
-        drink.bind(Duration::class.java).toProvider(DurationProvider())
+        fun <T : Any> bind(type: Class<T>, provider: DrinkProvider<T>) {
+            drink.bind(type).toProvider(provider)
+        }
+
+        bind(Profile::class.java, ProfileProvider())
+        bind(Rank::class.java, RankProvider())
+        bind(Duration::class.java, DurationProvider())
+        bind(GameMode::class.java, GamemodeProvider())
+        bind(Enchantment::class.java, EnchantmentProvider())
+        bind(Player::class.java, PlayerProvider())
 
         val commands = mapOf(
             DiscordCommand() to listOf("discord", "dc"),
