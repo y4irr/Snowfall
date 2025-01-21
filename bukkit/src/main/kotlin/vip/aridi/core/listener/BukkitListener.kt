@@ -19,9 +19,12 @@ import vip.aridi.core.module.BukkitManager
 import vip.aridi.core.module.ModuleLifecycleManager
 import vip.aridi.core.module.SharedManager
 import vip.aridi.core.module.impl.core.ProfileModule
+import vip.aridi.core.module.system.GrantModule
 import vip.aridi.core.profile.Profile
 import vip.aridi.core.punishments.PunishmentType
+import vip.aridi.core.star.StarPunishmentListener
 import vip.aridi.core.utils.CC
+import vip.aridi.core.utils.TimeUtil
 import vip.aridi.star.event.StarEvent
 import java.util.*
 import kotlin.math.acos
@@ -117,6 +120,19 @@ class BukkitListener : Listener {
 
                 profile.name = e.name
 
+                val punishments = SharedManager.punishmentModule.findByVictimOrIdentifier(e.uniqueId, profile.addresses)
+                if (punishments.isNotEmpty()) {
+                    val punishment = SharedManager.punishmentModule.findMostRecentPunishment(punishments, arrayListOf(PunishmentType.BLACKLIST, PunishmentType.BAN))
+                    if (punishment != null) {
+                        e.loginResult = AsyncPlayerPreLoginEvent.Result.KICK_BANNED
+                        e.kickMessage = StarPunishmentListener.getPunishmentKickMessage(e.uniqueId, punishment, false)
+                        return@runTaskAsynchronously
+                    }
+                }
+
+                SharedManager.punishmentModule.mutes[profile.id] = punishments.filter { it.type == PunishmentType.MUTE }.toHashSet()
+                BukkitManager.profileModule.profiles[profile.id] = profile
+
                 val grants = SharedManager.grantModule.findAllByPlayer(e.uniqueId)
                 if (grants.isEmpty()) {
                     SharedManager.grantModule.grant(
@@ -170,6 +186,57 @@ class BukkitListener : Listener {
         }
 
         e.allow()
+    }
+
+    @EventHandler()
+    fun onAsyncPlayerChat(e: AsyncPlayerChatEvent) {
+        if (e.isCancelled) return
+
+        val player = e.player
+        val profile = BukkitManager.profileModule.getProfile(player.uniqueId)
+        val color = try {
+            ChatColor.valueOf(profile?.chatColor ?: "WHITE").toString()
+        } catch (ex: Exception) {
+            ChatColor.WHITE
+        }
+
+        val punishment = SharedManager.punishmentModule.findMostRecentPunishment(
+            SharedManager.punishmentModule.mutes[player.uniqueId]!!,
+            arrayListOf(PunishmentType.MUTE)
+        )
+
+        if (punishment != null) {
+            val message = if (punishment.isPermanent()) {
+                "You are permanently silenced"
+            } else {
+                "You are currently muted, you can speak again in ${ChatColor.YELLOW}${
+                    TimeUtil.formatIntoDetailedString(
+                        punishment.getRemaining()
+                    )
+                }${ChatColor.RED}."
+            }
+            player.sendMessage("${ChatColor.RED}$message")
+            e.isCancelled = true
+            return
+        }
+
+        if (!Snowfall.get().config.getBoolean("CHAT-FORMAT.ENABLED")) return
+
+        val messageFormat: String
+
+        val bestGrant = SharedManager.grantModule.findBestRank(SharedManager.grantModule.findAllByPlayer(player.uniqueId))
+        val prefix = bestGrant.prefix ?: ""
+        messageFormat = Snowfall.get().config.getString("CHAT-FORMAT.FORMAT")
+            .replace("{rank}", CC.translate(prefix))
+            .replace("{name}", CC.translate("${ChatColor.getLastColors(prefix) ?: ChatColor.WHITE}${player.name}") + "${ChatColor.RESET}: ")
+            .replace("{message}", "$color${e.message}")
+        e.isCancelled = true
+
+        e.recipients.forEach { recipient ->
+            recipient.sendMessage(messageFormat)
+        }
+
+
     }
 
     @EventHandler(priority = EventPriority.HIGH)

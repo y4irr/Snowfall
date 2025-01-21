@@ -175,6 +175,19 @@ class PunishmentModule: IModule {
         activePunishments.clear()
     }
 
+    fun findMostRecentPunishment(punishments: MutableSet<PunishmentData>, types: MutableList<PunishmentType> = mutableListOf()): PunishmentData? {
+        return CompletableFuture.supplyAsync {
+            punishments
+                .filter { types.contains(it.type) }
+                .filter { !it.isVoided() && !it.isPardoned() }
+                .sortedBy { it.type.ordinal }
+                .reversed()
+                .sortedBy { it.created }
+                .reversed()
+                .firstOrNull()
+        }.join()
+    }
+
     override fun reload() {
         activePunishments.clear()
         val cursor = SharedManager.databaseModule.getCollection("punishments").find().iterator()

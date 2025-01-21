@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 class ProfileModule : IModule {
 
-    private var profiles = mutableMapOf<UUID, Profile>()
+    var profiles = mutableMapOf<UUID, Profile>()
     private var profilesByName = mutableMapOf<String, Profile>()
 
     private val uuidToName = ConcurrentHashMap<UUID,String>()
