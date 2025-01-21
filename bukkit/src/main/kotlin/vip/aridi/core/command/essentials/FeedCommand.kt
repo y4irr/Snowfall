@@ -1,5 +1,11 @@
 package vip.aridi.core.command.essentials
 
+import com.jonahseguin.drink.annotation.Sender
+import org.bukkit.ChatColor
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import vip.aridi.core.utils.CC
+
 /*
  * This project can't be redistributed without
  * authorization of the developer
@@ -10,4 +16,25 @@ package vip.aridi.core.command.essentials
  */
 
 class FeedCommand {
+
+
+    fun feed(
+        @Sender sender: CommandSender,
+        target: Player
+    ) {
+        if (sender !is Player) return
+
+        if (sender != target && !sender.hasPermission("snowfall.essentials.feed")) {
+            sender.sendMessage(CC.translate("&cNo permission to feed other players."))
+            return
+        }
+
+        target.foodLevel = 20
+        target.saturation = 10.0f
+
+        if (sender != target) {
+            sender.sendMessage(CC.translate("&6${target.displayName} has been fed."))
+        }
+        target.sendMessage(CC.translate("&6You have been fed."))
+    }
 }

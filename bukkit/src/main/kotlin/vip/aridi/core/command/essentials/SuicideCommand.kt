@@ -1,5 +1,10 @@
 package vip.aridi.core.command.essentials
 
+import com.jonahseguin.drink.annotation.Sender
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import vip.aridi.core.utils.CC
+
 /*
  * This project can't be redistributed without
  * authorization of the developer
@@ -10,4 +15,12 @@ package vip.aridi.core.command.essentials
  */
 
 class SuicideCommand {
+
+    fun suicide(
+        @Sender sender: CommandSender
+    ) {
+        if (sender !is Player) return
+        sender.health = 0.0
+        sender.sendMessage(CC.translate("&cYou have been killed."))
+    }
 }

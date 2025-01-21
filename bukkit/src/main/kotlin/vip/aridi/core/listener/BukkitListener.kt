@@ -254,8 +254,10 @@ class BukkitListener : Listener {
         }
 
         SharedManager.grantModule.active.remove(e.player.uniqueId)
+        SharedManager.punishmentModule.mutes.remove(e.player.uniqueId)
     }
 
+    @EventHandler()
     fun onAsyncPlayerChatEvent(e: AsyncPlayerChatEvent) {
         if (e.isCancelled) return
 

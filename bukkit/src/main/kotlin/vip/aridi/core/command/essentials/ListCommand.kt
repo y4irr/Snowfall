@@ -23,39 +23,30 @@ import vip.aridi.core.utils.CC
 
 class ListCommand {
 
-    @Command(name = "",
-        desc = ""
-    )
+    @Command(name = "", desc = "List online players and their ranks.")
     fun listCommand(@Sender sender: CommandSender) {
-        sender.sendMessage(CC.translate(StringUtils.join(
-            SharedManager.rankModule.cache.values
+        val visibleRanks = SharedManager.rankModule.cache.values
             .filter { canSee(sender, it) }
-            .sortedBy { it.priority }
-            .reversed()
-            .map { it.displayName }, "${ChatColor.WHITE}, ")))
+            .sortedByDescending { it.priority }
+            .joinToString(separator = "${CC.WHITE}, ") { it.displayName }
+
+        sender.sendMessage(CC.translate(visibleRanks))
 
         val players = Bukkit.getServer().onlinePlayers
-            .filter { if (sender is Player) return@filter sender.canSee(it) else return@filter true }
-            .sortedBy {
-                val priority = SharedManager.grantModule.findGrantedRank(it.uniqueId).priority
-
-                return@sortedBy priority
+            .filter { sender !is Player || sender.canSee(it) }
+            .sortedByDescending { SharedManager.grantModule.findGrantedRank(it.uniqueId).priority }
+            .joinToString(separator = "&f, ") {
+                formatName(it, SharedManager.grantModule.findGrantedRank(it.uniqueId))
             }
-            .reversed()
-            .map { formatName(it, SharedManager.grantModule.findGrantedRank(it.uniqueId)) }
 
-        sender.sendMessage(
-            CC.translate("&f(${players.size}/${Bukkit.getServer().maxPlayers}) [${StringUtils.join(players, "&f,")}&f]")
-        )
+        sender.sendMessage(CC.translate("&f(${players.size}/${Bukkit.getServer().maxPlayers}) [&f$players&f]"))
     }
 
     private fun canSee(sender: CommandSender, rank: Rank): Boolean {
-        if (sender.isOp || !rank.hidden) return true
-
-        return sender.hasPermission("snowfall.grant.rank.${rank.name}")
+        return sender.isOp || !rank.hidden || sender.hasPermission("snowfall.grant.rank.${rank.name}")
     }
 
     private fun formatName(player: Player, rank: Rank): String {
-        return "${ChatColor.valueOf(rank.color)}${player.name}"
+        return "${rank.color}${player.name}"
     }
 }

@@ -30,7 +30,7 @@ class BanCommand {
         @Sender sender: CommandSender,
         @Flag('s') silent: Boolean,
         player: Player,
-        time: Duration,
+        @OptArg("perm") time: Duration,
         @Text reason: String) {
 
         val config = BukkitManager.configModule.mainConfig.config.getString("SERVER-MANAGER.SERVER-NAME")
