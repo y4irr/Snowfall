@@ -27,6 +27,8 @@ data class PunishmentData(
     var pardonedSilent: Boolean = true
     var pardoned: Long? = null
     var pardoner: UUID? = null
+    var ip: Boolean = false
+    var ipAddresses: Set<String> = emptySet()
 
     fun isVoided() = duration > 0 && (created + duration) <= System.currentTimeMillis()
 

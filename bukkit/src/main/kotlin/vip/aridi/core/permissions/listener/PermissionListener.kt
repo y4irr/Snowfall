@@ -37,15 +37,10 @@ class PermissionListener : Listener {
         val grant = SharedManager.grantModule.findGrantedRank(player.uniqueId)
         grant.permissions.forEach {
             if (it == "*") player.isOp = true
-            println("permission: $it set to true")
             attachment.setPermission(it, true)
         }
 
         player.recalculatePermissions()
-
-        player.effectivePermissions.forEach {
-            println("effective permission: ${it.permission}")
-        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -57,7 +52,6 @@ class PermissionListener : Listener {
             val grant = SharedManager.grantModule.findGrantedRank(player.uniqueId)
             grant.permissions.forEach {
                 if (it == "*") player.isOp = false
-                println("permission: $it set to false")
                 attachment.setPermission(it, false)
             }
 

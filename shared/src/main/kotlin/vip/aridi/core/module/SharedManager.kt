@@ -2,6 +2,7 @@ package vip.aridi.core.module
 
 import vip.aridi.core.module.core.DatabaseModule
 import vip.aridi.core.module.system.GrantModule
+import vip.aridi.core.module.system.PunishmentModule
 import vip.aridi.core.module.system.RankModule
 import java.util.logging.Logger
 
@@ -21,6 +22,7 @@ object SharedManager {
     val rankModule = RankModule()
     val grantModule = GrantModule()
     val databaseModule = DatabaseModule()
+    val punishmentModule = PunishmentModule()
 
     const val UPDATE_PERMISSION = "IlgHL-G5aAjB-ADp1O9l-zDD"
     const val UPDATE_NAME = "U4WJ9-Ypw4XO-61cSk7t-N2R"
@@ -31,6 +33,7 @@ object SharedManager {
     const val CREATE_RANK = "zclKa-2nsSd9-hWO17fh-3kP"
     const val DELETE_RANK = "3D3QN-80ktLT-S7TJkbg-fO9"
     const val UPDATE_RANK = "1f8nU-KF7RVI-ARl1rKp-K1V"
+    const val PUNISH_ID = "K8YP0-H7Sntv-p6OC6Jj-EE9"
 
     var mongoUri: String = ""
     var mongoDbName: String = ""

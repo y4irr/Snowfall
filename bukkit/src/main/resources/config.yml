@@ -1,6 +1,15 @@
+SERVER-MANAGER:
+  SERVER-NAME: "Hub-01"
+  SERVER-GROUP: "Hubs"
+
 CHAT-FORMAT:
   ENABLED: true
   FORMAT: "{rank}{name}: {message}"
+
+PUNISHMENT:
+  BANNED-CAN-JOIN-HUB: false
+  BAN-JAIL: false
+  SS-JAIL: false
 
 LINKS:
   DISCORD: ""

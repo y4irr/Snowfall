@@ -1,6 +1,7 @@
 allprojects {
     group = "vip.aridi.core"
-    version = "1.0-SNAPSHOT"
+    version = "2025.01.18"
+
 }
 
 tasks.register('Snowfall shared') {

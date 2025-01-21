@@ -2,9 +2,9 @@ package vip.aridi.core.module
 
 import vip.aridi.core.module.impl.core.CommandsModule
 import vip.aridi.core.module.impl.core.ConfigurationModule
-import vip.aridi.core.module.core.DatabaseModule
 import vip.aridi.core.module.impl.core.ProfileModule
 import vip.aridi.core.module.impl.system.*
+import vip.aridi.core.module.system.PunishmentModule
 import java.util.logging.Logger
 
 /*
@@ -24,7 +24,6 @@ class BukkitManager: ModuleLifecycleManager {
         val configModule = ConfigurationModule()
         val profileModule = ProfileModule()
         val permissionModule = PermissionModule()
-        val punishmentModule = PunishmentModule()
     }
     private val commandsModule = CommandsModule()
     private val listenerModule = ListenersModule()
@@ -59,9 +58,9 @@ class BukkitManager: ModuleLifecycleManager {
         addModules(listenerModule)
         addModules(SharedManager.rankModule)
         addModules(SharedManager.grantModule)
+        addModules(SharedManager.punishmentModule)
         addModules(permissionModule)
         addModules(managerModule)
-        addModules(punishmentModule)
         addModules(commandsModule)
     }
 

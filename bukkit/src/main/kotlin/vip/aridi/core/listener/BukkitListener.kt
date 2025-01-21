@@ -20,6 +20,7 @@ import vip.aridi.core.module.ModuleLifecycleManager
 import vip.aridi.core.module.SharedManager
 import vip.aridi.core.module.impl.core.ProfileModule
 import vip.aridi.core.profile.Profile
+import vip.aridi.core.punishments.PunishmentType
 import vip.aridi.core.utils.CC
 import vip.aridi.star.event.StarEvent
 import java.util.*
@@ -57,7 +58,7 @@ class BukkitListener : Listener {
                     .find(Filters.eq("_id", e.uniqueId.toString()))
                     .first()
 
-                val profile: Profile = /*if (doc == null) */Profile(e.uniqueId, e.name)/* else {
+                val profile = /*if (doc == null) */Profile(e.uniqueId, e.name)/* else {
                     try {
                         val jsonObject = SharedManager.databaseModule.gson.fromJson(doc.toJson(), JsonObject::class.java)
                         if (jsonObject.has("address") && jsonObject["address"].isJsonArray) {
@@ -73,6 +74,16 @@ class BukkitListener : Listener {
                         return@runTaskAsynchronously
                     }
                 }*/
+
+                val punishment = SharedManager.punishmentModule.findLastPunishment(e.uniqueId)
+
+                if (punishment != null) {
+                    if (punishment.type == PunishmentType.BAN) {
+                        if (!BukkitManager.configModule.mainConfig.config.getBoolean("PUNISHMENT.BANNED-CAN-JOIN-HUB")) {
+                            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, CC.translate("&cYou're currently banned from CyrusPvP\n &cReason: &f${punishment.reason}\n &eAppeal at: discord.gg/cyruspvp or ts.cyruspvp.net"))
+                        }
+                    }
+                }
 
                 val ip = e.address.hostAddress
                 profile.online = true
