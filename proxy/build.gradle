@@ -10,6 +10,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven { url 'https://maven.elmakers.com/repository/' }
+    maven { url 'https://repo.papermc.io/repository/maven-public/' }
 }
 
 dependencies {
@@ -20,6 +21,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.9.0'
 
     implementation 'vip.aridi:Star:1.0-SNAPSHOT'
+
+    compileOnly 'io.github.waterfallmc:waterfall-api:1.20-R0.3-SNAPSHOT'
 
 
     compileOnly fileTree(dir: '.lib', include: '*.jar')
