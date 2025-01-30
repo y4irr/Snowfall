@@ -2,12 +2,9 @@ package vip.aridi.core.command.essentials
 
 import com.jonahseguin.drink.annotation.Command
 import com.jonahseguin.drink.annotation.Sender
-import org.apache.commons.lang3.StringUtils
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import vip.aridi.core.module.BukkitManager
 import vip.aridi.core.module.SharedManager
 import vip.aridi.core.rank.Rank
 import vip.aridi.core.utils.CC
@@ -34,12 +31,14 @@ class ListCommand {
 
         val players = Bukkit.getServer().onlinePlayers
             .filter { sender !is Player || sender.canSee(it) }
-            .sortedByDescending { SharedManager.grantModule.findGrantedRank(it.uniqueId).priority }
-            .joinToString(separator = "&f, ") {
-                formatName(it, SharedManager.grantModule.findGrantedRank(it.uniqueId))
-            }
+            .map { player -> player to SharedManager.grantModule.findGrantedRank(player.uniqueId) }
+            .sortedByDescending { it.second.priority }
 
-        sender.sendMessage(CC.translate("&f(${players.size}/${Bukkit.getServer().maxPlayers}) [&f$players&f]"))
+        val playersFormatted = players.joinToString(separator = "&f, ") {
+            formatName(it.first, it.second)
+        }
+
+        sender.sendMessage(CC.translate("&f(${players.size}/${Bukkit.getServer().maxPlayers}) [&f$playersFormatted&f]"))
     }
 
     private fun canSee(sender: CommandSender, rank: Rank): Boolean {
