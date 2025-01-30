@@ -11,7 +11,6 @@ import vip.aridi.core.module.BukkitManager
 import vip.aridi.core.module.SharedManager
 import vip.aridi.core.module.impl.core.ProfileModule
 import vip.aridi.core.punishments.PunishmentType
-import vip.aridi.core.punishments.menu.PunishmentTimeMenu
 import vip.aridi.core.utils.Duration
 
 /*
