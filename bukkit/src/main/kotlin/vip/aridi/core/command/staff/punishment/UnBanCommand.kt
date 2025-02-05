@@ -11,6 +11,12 @@ import vip.aridi.core.utils.CC
 
 class UnBanCommand {
 
+    @Command(
+        name = "",
+        desc = "")
+    @Require(
+        "snowfall.punishment.unban"
+    )
     fun pardon(
         @Sender sender: CommandSender,
         @Flag('s') silent: Boolean,

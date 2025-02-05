@@ -1,8 +1,6 @@
 package vip.aridi.core.command.staff.punishment
 
-import com.jonahseguin.drink.annotation.Flag
-import com.jonahseguin.drink.annotation.Sender
-import com.jonahseguin.drink.annotation.Text
+import com.jonahseguin.drink.annotation.*
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import vip.aridi.core.module.BukkitManager
@@ -14,6 +12,12 @@ import vip.aridi.core.utils.Duration
 
 class BlacklistCommand {
 
+    @Command(
+        name = "",
+        desc = "")
+    @Require(
+        "snowfall.punishment.blacklist"
+    )
     fun punishCommand(
         @Sender sender: CommandSender,
         @Flag('s') silent: Boolean,

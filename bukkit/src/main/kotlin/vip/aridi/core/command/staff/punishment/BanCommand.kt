@@ -1,10 +1,6 @@
 package vip.aridi.core.command.staff.punishment
 
-import com.jonahseguin.drink.annotation.Command
-import com.jonahseguin.drink.annotation.Flag
-import com.jonahseguin.drink.annotation.OptArg
-import com.jonahseguin.drink.annotation.Sender
-import com.jonahseguin.drink.annotation.Text
+import com.jonahseguin.drink.annotation.*
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import vip.aridi.core.module.BukkitManager
@@ -24,7 +20,12 @@ import vip.aridi.core.utils.Duration
 
 class BanCommand {
 
-    @Command(name = "", desc = "")
+    @Command(
+        name = "",
+        desc = "")
+    @Require(
+        "snowfall.punishment.ban"
+    )
     fun punishCommand(
         @Sender sender: CommandSender,
         @Flag('s') silent: Boolean,
