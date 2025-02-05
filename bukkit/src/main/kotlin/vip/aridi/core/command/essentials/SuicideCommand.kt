@@ -1,5 +1,7 @@
 package vip.aridi.core.command.essentials
 
+import com.jonahseguin.drink.annotation.Command
+import com.jonahseguin.drink.annotation.Require
 import com.jonahseguin.drink.annotation.Sender
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -16,6 +18,13 @@ import vip.aridi.core.utils.CC
 
 class SuicideCommand {
 
+    @Command(
+        name = "",
+        desc = ""
+    )
+    @Require(
+        "snowfall.essentials.suicide"
+    )
     fun suicide(
         @Sender sender: CommandSender
     ) {
