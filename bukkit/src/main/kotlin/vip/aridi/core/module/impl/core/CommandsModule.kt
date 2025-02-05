@@ -4,14 +4,14 @@ import com.jonahseguin.drink.CommandService
 import com.jonahseguin.drink.Drink
 import com.jonahseguin.drink.parametric.DrinkProvider
 import org.bukkit.GameMode
+import org.bukkit.command.defaults.EnchantCommand
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import vip.aridi.core.Snowfall
-import vip.aridi.core.command.admin.grants.GrantCommand
-import vip.aridi.core.command.admin.grants.GrantsCommand
-import vip.aridi.core.command.admin.grants.oGrantCommand
-import vip.aridi.core.command.admin.ranks.RankCommand
+import vip.aridi.core.command.admin.grants.*
+import vip.aridi.core.command.admin.ranks.*
 import vip.aridi.core.command.essentials.*
+import vip.aridi.core.command.staff.punishment.*
 import vip.aridi.core.module.IModule
 import vip.aridi.core.module.ModuleCategory
 import vip.aridi.core.profile.Profile
@@ -47,6 +47,8 @@ class CommandsModule: IModule {
         bind(Player::class.java, PlayerProvider())
 
         val commands = mapOf(
+
+            //Essentials
             DiscordCommand() to listOf("discord", "dc"),
             TwitterCommand() to listOf("x", "twitter"),
             TeamSpeakCommand() to listOf("teamspeak", "ts"),
@@ -54,10 +56,45 @@ class CommandsModule: IModule {
             StoreCommand() to listOf("store"),
             LoreCommand() to listOf("lore"),
             ListCommand() to listOf("list"),
+            SudoCommand() to listOf("sudo"),
+            HatCommand() to listOf("hat"),
+            EnchantCommand() to listOf("enchant"),
+            FeedCommand() to listOf("feed"),
+            GamemodeCommand() to listOf("gamemode"),
+            GiveCommand() to listOf("give"),
+            HeadCommand() to listOf("head", "skull"),
+            KillAllCommand() to listOf("killall"),
+            KillCommand() to listOf("kill"),
+            ListCommand() to listOf("list"),
+            LoreCommand() to listOf("lore"),
+            MoreCommand() to listOf("more"),
+            PingCommand() to listOf("ping"),
+            PlayTimeCommand() to listOf("playtime"),
+            RawCommand() to listOf("raw"),
+            RenameCommand() to listOf("rename"),
+            RepairCommand() to listOf("repair"),
+            ReportCommand() to listOf("report"),
+            SpeedCommand() to listOf("speed"),
+            StoreCommand() to listOf("store"),
+            SuicideCommand() to listOf("suicide"),
+            TeleportationCommand() to listOf("tp"),
+
+            //Rank commands
             GrantCommand() to listOf("grant"),
             GrantsCommand() to listOf("grants"),
             oGrantCommand() to listOf("ogrant"),
-            RankCommand() to listOf("rank")
+            RankCommand() to listOf("rank"),
+
+            //Punishments commands
+            BlacklistCommand() to listOf("blacklist"),
+            BanCommand() to listOf("ban"),
+            MuteCommand() to listOf("mute"),
+            IPBanCommand() to listOf("ipban"),
+            IPMuteCommand() to listOf("ipmute"),
+            KickCommand() to listOf("kick"),
+            UnBanCommand() to listOf("unban"),
+            UnBlacklistCommand() to listOf("unblacklist"),
+            UnMuteCommand() to listOf("unmute"),
         )
 
         commands.forEach { (commands, aliases) ->
