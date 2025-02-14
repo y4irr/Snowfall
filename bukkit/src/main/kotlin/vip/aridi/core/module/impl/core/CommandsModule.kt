@@ -6,6 +6,7 @@ import com.jonahseguin.drink.parametric.DrinkProvider
 import org.bukkit.GameMode
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import vip.aridi.core.Snowfall
 import vip.aridi.core.command.admin.grants.*
 import vip.aridi.core.command.admin.ranks.*
@@ -44,6 +45,7 @@ class CommandsModule: IModule {
         bind(GameMode::class.java, GamemodeProvider())
         bind(Enchantment::class.java, EnchantmentProvider())
         bind(Player::class.java, PlayerProvider())
+        bind(ItemStack::class.java, ItemStackProvider())
 
         val commands = mapOf(
 
