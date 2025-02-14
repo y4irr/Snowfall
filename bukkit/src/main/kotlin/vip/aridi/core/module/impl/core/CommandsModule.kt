@@ -4,7 +4,6 @@ import com.jonahseguin.drink.CommandService
 import com.jonahseguin.drink.Drink
 import com.jonahseguin.drink.parametric.DrinkProvider
 import org.bukkit.GameMode
-import org.bukkit.command.defaults.EnchantCommand
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import vip.aridi.core.Snowfall
@@ -58,7 +57,7 @@ class CommandsModule: IModule {
             ListCommand() to listOf("list"),
             SudoCommand() to listOf("sudo"),
             HatCommand() to listOf("hat"),
-            EnchantCommand() to listOf("enchant"),
+            EnchantmentCommand() to listOf("enchant"),
             FeedCommand() to listOf("feed"),
             GamemodeCommand() to listOf("gamemode"),
             GiveCommand() to listOf("give"),
