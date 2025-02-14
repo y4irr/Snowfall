@@ -1,5 +1,7 @@
 package vip.aridi.core.command.essentials
 
+import com.jonahseguin.drink.annotation.Command
+import com.jonahseguin.drink.annotation.Require
 import com.jonahseguin.drink.annotation.Sender
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
@@ -17,7 +19,11 @@ import vip.aridi.core.utils.CC
 
 class FeedCommand {
 
-
+    @Command(
+        name = "",
+        desc = "This command feeds you.",
+    )
+    @Require("snowfall.essentials.feed")
     fun feed(
         @Sender sender: CommandSender,
         target: Player
